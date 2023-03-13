@@ -1,0 +1,21 @@
+{
+  "name": "amz_affiliate",
+  "version": "1.0.0",
+  "description": "Amazon Affiliate",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon Server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hunglt",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.0",
+    "mongoose": "^7.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
+  }
+}
