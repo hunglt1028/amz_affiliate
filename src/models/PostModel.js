@@ -1,9 +1,15 @@
-const mongoose = require('mongoose');
-const PostModel = new mongoose.Schema({
-    title: String,
-    author: String,
-    content:String,
-    date: {type: Date, default: Date.now()},
-    publish: Boolean
-});
-const Post = mongoose.model('PostModel', PostModel);
+
+const conn = require('../repositories/Repository');
+const Category = require('./Category');
+
+async function testConnect(){
+    try{
+        await conn.authenticate();
+        //await conn.sync();
+        Category.create({name:'Cá Chép'});
+        console.log('Connected');
+    }catch(err){
+        console.log(err);
+    }
+}
+testConnect();
