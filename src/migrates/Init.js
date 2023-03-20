@@ -2,8 +2,8 @@ const Sequelize = require('sequelize');
 
 const config = require('../config/DbConfig');
 
-const Category = require('./Category');
-const User = require('./User');
+const Category = require('../models/Category');
+const User = require('../models/User');
 //Connect db
 const sequelize = new Sequelize(config.dbname, config.user, config.password,{
     host:config.host,
@@ -23,11 +23,14 @@ sequelize.authenticate()
 User.init(sequelize);
 Category.init(sequelize);
 
+
 db.sequelize=sequelize;
 db.Sequelize = Sequelize;
-// db.sequelize.sync({force:false})
-// .then(()=>{
-//     console.log('re-sync done!');
-// })
+db.sequelize.sync({force:true})
+.then(()=>{
+    //Create Admin Account
+    User.create({firstName:'Hung', lastName:'Le Tien', email:'hunglt1028@gmail.com',password:'123456a@'});
+    console.log('re-sync done!');
+})
 
 module.exports =db;

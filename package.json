@@ -5,7 +5,7 @@
   "main": "Server.js",
   "scripts": {
     "start": "nodemon Server.js",
-    "testDB": "node ./src/models/PostModel.js",
+    "initDB": "node ./src/migrates/Init.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "hunglt",

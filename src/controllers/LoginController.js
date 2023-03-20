@@ -1,5 +1,6 @@
 class LoginController{
-    index(req,res,next){
-        res.render('login',{layout: 'admin.hbs'});
+    getLogin(req,res,next){
+        res.render('login/index',{layout: 'admin.hbs'});
     }
 }
+module.exports = new LoginController;
