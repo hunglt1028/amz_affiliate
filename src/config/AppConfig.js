@@ -8,4 +8,8 @@ module.exports ={
     },
     sitemap_type:'file',
     db:require('./DbConfig'),
+    jwt:{
+        secret: 'kendz2810',
+        expiration:'24'
+    }
 };
