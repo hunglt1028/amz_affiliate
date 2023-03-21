@@ -721,16 +721,6 @@ strong {
   overflow: hidden;
 }
 
-.volunteer-section::after {
-  content: "";
-  background: var(--primary-color);
-  border-radius: 50%;
-  position: absolute;
-  bottom: -110px;
-  right: -80px;
-  width: 350px;
-  height: 350px;
-}
 
 .volunteer-form {
   background: var(--white-color);
@@ -1277,14 +1267,12 @@ blockquote::before {
 -----------------------------------------*/
 .site-footer {
   background-color: var(--site-footer-bg-color);
-  padding-top: 70px;
 }
 
 .site-footer-bottom {
   background-color: var(--secondary-color);
   position: relative;
   z-index: 2;
-  margin-top: 70px;
   padding-top: 25px;
   padding-bottom: 25px;
 }
@@ -1564,17 +1552,12 @@ blockquote::before {
     padding-top: 0;
   }
 
-  .site-footer {
-    padding-top: 50px;
-  }
-
   .copyright-text-wrap {
     justify-content: center;
   }
 
   .site-footer-bottom {
     text-align: center;
-    margin-top: 50px;
   }
 
   .site-footer-bottom .footer-menu {
@@ -1659,5 +1642,9 @@ blockquote::before {
   .donate-form {
     padding: 25px;
   }
+}
+.full-height{
+  height: calc(100vh);
+  min-height: 450px;
 }
 

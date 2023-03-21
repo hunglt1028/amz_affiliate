@@ -11,5 +11,8 @@ module.exports ={
     jwt:{
         secret: 'kendz2810',
         expiration:'24'
+    },
+    session:{
+        secret:'kendz2810'
     }
 };

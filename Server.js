@@ -8,7 +8,6 @@ const db = require('./src/models/Index');
 const config = require('./src/config/AppConfig');
 const app = express();
 const route = require('./src/routes/IndexRouter');
-const flash = require('connect-flash');
 
 // Cài đặt handlebars engine
 app.engine('hbs', engine({ extname: '.hbs' }));
@@ -25,13 +24,10 @@ app.use(cookieParser());
 
 // Cài đặt express-session
 app.use(session({
-    secret:'secret',
+    secret:config.session.secret,
     resave:true,
     saveUninitialized:true
 }));
-
-// Cài đặt connect-flash để hiển thị thông báo lỗi
-app.use(flash());
 
 //setup routes
 route(app);

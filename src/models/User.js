@@ -9,7 +9,7 @@ class user extends Model {
     generateToken(){
         return jwt.sign({userId: this.id}, appConfig.jwt.secret, {expiresIn: appConfig.jwt.expiration});
     }
-    static async finByEmal(email){
+    static async finByEmail(email){
         return this.findOne({where:{email:email}});
     }
     static init(sequelize){
