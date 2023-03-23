@@ -16,7 +16,7 @@ app.set('views', path.join(__dirname, 'src\\views'));
 
 // Thiết lập đường dẫn tĩnh
 app.use('/public', express.static(path.join(__dirname, 'src/public')));
-
+app.use('/uploads', express.static(path.join(__dirname, 'src/uploads')));
 // Cài đặt bodyParser và cookieParser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
