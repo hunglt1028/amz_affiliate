@@ -1,8 +1,141 @@
-<div class="col-6">
-    <form action="/dashboard/tags/add">
-        <input name="name"/>
-        <input name="slug"/>
-        <input name="description"/>
-        <button type="submit">Thêm thẻ</button>
-    </form>
+<div class="row" style="padding-left: 10px;">
+    <div class="col-4">
+        <form id="frmAddTag">
+            <h3>Thêm thẻ</h3>
+            <div class="form-group">
+                <label for="name" class="mt-md-2">Tên*</label>
+                <small id="nameHelp" class="form-text text-muted"> (Tên riêng sẽ hiển thị trên trang mạng của
+                    bạn).</small>
+                <input type="text" class="form-control mt-md-2" id="name" name="name" aria-describedby="nameHelp">
+            </div>
+            <div class="form-group">
+                <label for="link" class="mt-md-2">Đường dẫn*</label>
+                <small id="linkHelp" class="form-text text-muted">Chuỗi cho đường dẫn tĩnh là phiên bản của tên hợp
+                    chuẩn với Đường dẫn (URL). Chuỗi này bao gồm chữ cái thường, sô và dấu gạch ngang(-)</small>
+                <input type="text" class="form-control mt-md-2" name="link" id="link" aria-describedby="linkHelp">
+            </div>
+            <div class="form-group">
+                <label for="description" class="mt-md-2">Mô tả</label>
+                <small id="descriptionHelp" class="form-text text-muted">(Thông thường mô tả này không được sử dụng
+                    trong
+                    các giao diện, tuy nhiên có vài giao diện có thể hiển thị mô tả này)</small>
+                <textarea class="form-control mt-md-2" name="description" id="description"
+                    aria-describedby="descriptionHelp"></textarea>
+            </div>
+            <button type="button" id="btn-add-tag" class="btn btn-outline-success mt-md-3">Thêm thẻ</button>
+        </form>
+    </div>
+    <div class="col-8">
+        <form class="row g-2">
+            <div class="col-auto">
+                <input type="password" class="form-control" id="inputPassword2">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-outline-info mb-2">Tìm thẻ</button>
+            </div>
+        </form>
+        {{!--<form class="d-flex">
+            <input class="form-control me-1" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>--}}
+        <div class="tab-content rounded-bottom">
+            <div class="tab-pane p-3 active preview" role="tabpanel">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">{{total}}</th>
+                            <th scope="col">Tên thẻ</th>
+                            <th scope="col">Đường dẫn</th>
+                            <th scope="col">Mô tả</th>
+                            <th scope="col">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each tags}}
+                        <tr>
+                            <th scope="row">{{@index}}</th>
+                            <td>{{this.name}}</td>
+                            <td>{{this.link}}</td>
+                            <td>{{this.description}}</td>
+                            <td colspan="10%"><button type="button" id="{{this.id}}">Xóa</button></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link"><<</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">>></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
 </div>
+<script>
+    //Gửi yêu cầu thêm mới
+    $('#btn-add-tag').click(function () {
+        if ($('#frmAddTag').valid()) {
+            showLoading();
+            let name = $('#name').val();
+            let link = $('#link').val();
+            let description = $('#description').val();
+            $.ajax({
+                url: '/dashboard/tags/add',
+                type: 'POST',
+                data: { name: name, link: link, description: description },
+                success: (res) => {
+                    hideLoading();
+                    if (res.status == 200) {
+                        $('#toast-success-body').html('Thêm thẻ thành công');
+                        showToastSuccess();
+                    } else {
+                        if (res.error.name == 'SequelizeUniqueConstraintError') {
+                            $('#toast-error-body').html('Tên thẻ đã tồn tại');
+                        } else {
+                            $('#toast-error-body').html('Thêm thẻ thất bại');
+                        }
+                        showToastError();
+                    }
+                },
+                error: (err) => {
+                    hideLoading();
+                    $('#toast-error-body').html('Thêm thẻ thất bại');
+                    showToastError();
+                }
+            })
+        }
+    })
+    //Validate thêm thẻ mới
+    $('#frmAddTag').validate({
+        rules: {
+            name: {
+                required: true,
+                maxlength: 150,
+            },
+            link: {
+                required: true,
+                maxlength: 150
+            }
+        },
+        messages: {
+            name: {
+                required: 'Tên thẻ không được để trống',
+                maxlength: 'Tên không quá 150 ký tự',
+            },
+            link: {
+                required: 'Đường dẫn không được để trống',
+                maxlength: 'đường dẫn không quá 150 ký tự',
+            }
+        }
+    });
+
+</script>

@@ -4,6 +4,7 @@ const config = require('../config/DbConfig');
 
 const Category = require('./Category');
 const User = require('./User');
+const Tag = require('./Tag');
 //Connect db
 const sequelize = new Sequelize(config.dbname, config.user, config.password,{
     host:config.host,
@@ -22,7 +23,7 @@ sequelize.authenticate()
 .catch(err=>{console.error('Unable to connect to database ',err)});
 User.init(sequelize);
 Category.init(sequelize);
-
+Tag.init(sequelize)
 db.sequelize=sequelize;
 db.Sequelize = Sequelize;
 // db.sequelize.sync({force:false})

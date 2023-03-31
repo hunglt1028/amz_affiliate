@@ -27,10 +27,49 @@
 
     <script src="/public/ckeditor/ckeditor.js"></script>
     <script src="/public/ckeditor/ckfinder.js"></script>
-
+    <script src="/public/js/jquery.min.js"></script>
+    <script src="/public/js/jquery.validate.min.js"></script>
 </head>
 
 <body>
+    {{!-- Loading start--}}
+    <div id="loading" class="loading">
+        <button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Đang tải...
+        </button>
+    </div>
+    {{!-- Loading End --}}
+    {{!-- Toast start--}}
+    {{!-- Success --}}
+    <div class="toast-container position-fixed">
+        <div id="toast-success" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header text-bg-success">
+                <i class="cil-check-alt"></i>
+                <strong class="me-auto">Thành công</strong>
+                <small id="succes-time">now</small>
+                <button type="button" class="btn-close" data-coreui-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div id="toast-success-body" class="toast-body">
+                Thực hiện tác vụ thành công.
+            </div>
+        </div>
+    </div>
+    {{!-- error --}}
+    <div class="toast-container position-fixed">
+        <div id="toast-error" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header text-bg-danger">
+                <i class="cil-check-alt"></i>
+                <strong class="me-auto">Thất bại</strong>
+                <small id="succes-time">now</small>
+                <button type="button" class="btn-close" data-coreui-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div id="toast-error-body" class="toast-body">
+                Thực hiện tác vụ thất bại
+            </div>
+        </div>
+    </div>
+    {{!-- Toast end --}}
     {{!-- Sidebar start --}}
     <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
         <div class="sidebar-brand d-none d-md-flex">
@@ -67,10 +106,10 @@
                     </svg>Trang</a>
                 <ul class="nav-group-items">
                     <li class="nav-item"><a class="nav-link" href="buttons/buttons.html"><span class="nav-icon"></span>
-                        Tất cả các trang</a></li>
+                            Tất cả các trang</a></li>
                     <li class="nav-item"><a class="nav-link" href="buttons/button-group.html"><span
                                 class="nav-icon"></span>
-                        Thêm trang mới</a></li>
+                            Thêm trang mới</a></li>
                 </ul>
             </li>
             <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
@@ -102,7 +141,8 @@
                         <use xlink:href="/public/coreui/icons/svg/free.svg#cil-star"></use>
                     </svg> Thành viên</a>
                 <ul class="nav-group-items">
-                    <li class="nav-item"><a class="nav-link" href="icons/coreui-icons-free.html">Tất cả người dùng</a></li>
+                    <li class="nav-item"><a class="nav-link" href="icons/coreui-icons-free.html">Tất cả người dùng</a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="icons/coreui-icons-brand.html">Thêm mới</a></li>
                 </ul>
             </li>
@@ -164,10 +204,7 @@
 
         </header>
         <div class="body flex-grow-1 px-1">
-            <div class="container">
-                {{{body}}}
-            </div>
-
+            {{{body}}}
         </div>
         {{> footer}}
     </div>
@@ -176,6 +213,22 @@
     <script src="/public/js/coreui.bundle.min.js"></script>
     <script src="/public/js/simplebar.min.js"></script>
     <script>
+        showToastSuccess = () => {
+            let toast_success = document.getElementById('toast-success');
+            let toast = new coreui.Toast(toast_success);
+            toast.show();
+        }
+        showToastError = () => {
+            let toast_error = document.getElementById('toast-error');
+            let toast = new coreui.Toast(toast_error);
+            toast.show();
+        }
+        showLoading = () => {
+            $('#loading').show();
+        }
+        hideLoading = () => {
+            $('#loading').hide();
+        }
     </script>
 
 </body>

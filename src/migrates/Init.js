@@ -4,6 +4,7 @@ const config = require('../config/DbConfig');
 
 const Category = require('../models/Category');
 const User = require('../models/User');
+const Tag = require('../models/Tag');
 //Connect db
 const sequelize = new Sequelize(config.dbname, config.user, config.password,{
     host:config.host,
@@ -22,6 +23,9 @@ sequelize.authenticate()
 .catch(err=>{console.error('Unable to connect to database ',err)});
 User.init(sequelize);
 Category.init(sequelize);
+Tag.init(sequelize)
+db.sequelize=sequelize;
+db.Sequelize = Sequelize;
 
 
 db.sequelize=sequelize;
@@ -29,7 +33,7 @@ db.Sequelize = Sequelize;
 db.sequelize.sync({force:true})
 .then(()=>{
     //Create Admin Account
-    User.create({firstName:'Hung', lastName:'Le Tien', email:'hunglt1028@gmail.com',password:'123456a@'});
+    User.create({firstName:'Hung', lastName:'Le Tien', email:'hunglt1028@gmail.com',password:'1'});
     console.log('re-sync done!');
 })
 

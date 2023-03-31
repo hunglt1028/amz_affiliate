@@ -7,7 +7,7 @@ const Constants ={
     layout:{
         AUTH:'auth.hbs',
         MAIN:'main.hbs',
-        
+        DASHBOARD:'dashboard.hbs',
     },
     page:{
         LOGIN:'./auth/login',
