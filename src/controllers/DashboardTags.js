@@ -5,11 +5,35 @@ const MESSAGES = require('../utils/Messages');
 const {slugConvert} = require('../utils/Common');
 const Tag = require('../models/Tag');
 class DashboardTags{
+    static pageSize=12;
     async getIndex(req,res){
-        let total =await Tag.count();
-        let listTag= await Tag.findAll({limit:15,offset:0});
-        listTag= listTag.map(tag=>tag.get({plain:true}));
-        res.render('dashboard/tags',{layout:constants.layout.DASHBOARD,tags:listTag,total:total});
+        let pageIndex=1
+        let tags= await Tag.getTags(pageIndex,DashboardTags.pageSize,null);
+        let listTag= tags.rows.map(tag=>tag.get({plain:true}));
+        let totalCount = tags.count;
+        let totalPage=Math.ceil(totalCount/DashboardTags.pageSize);
+        let data={};
+        data.tags=listTag;
+        data.totalCount=totalCount;
+        data.totalPage=totalPage
+        res.render('dashboard/tags',{layout:constants.layout.DASHBOARD,data:data});
+    }
+    async search(req,res){
+        let q= req.query.q ?? '';
+        let index = req.query.index ?? 1;
+        
+        try {
+            let tags = await Tag.getTags(index, DashboardTags.pageSize, q);    
+            dataRes.status = STATUS.SUSCCESS;
+            dataRes.data=tags;
+            return res.json(dataRes);
+
+        } catch (error) {
+            console.log(error);
+            dataRes.status = STATUS.ERROR_SERVER;
+            dataRes.error = error;
+            return res.json(dataRes);
+        }
     }
     async postAdd(req,res){
         let {name, link, description} =req.body;

@@ -26,9 +26,9 @@
         </form>
     </div>
     <div class="col-8">
-        <form class="row g-2">
+        <form id="frmSearch" class="row g-2">
             <div class="col-auto">
-                <input type="password" class="form-control" id="inputPassword2">
+                <input type="text" name="q" class="form-control" id="q">
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-outline-info mb-2">Tìm thẻ</button>
@@ -38,30 +38,31 @@
             <input class="form-control me-1" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>--}}
-        <div class="tab-content rounded-bottom">
+        <div class="border tab-content rounded-bottom">
             <div class="tab-pane p-3 active preview" role="tabpanel">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">{{total}}</th>
+                            <th id="total_count" scope="col">{{data.totalCount}}</th>
                             <th scope="col">Tên thẻ</th>
                             <th scope="col">Đường dẫn</th>
                             <th scope="col">Mô tả</th>
                             <th scope="col">Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {{#each tags}}
+                    <tbody id="tags_table">
+                        {{#each data.tags}}
                         <tr>
                             <th scope="row">{{@index}}</th>
                             <td>{{this.name}}</td>
                             <td>{{this.link}}</td>
                             <td>{{this.description}}</td>
-                            <td colspan="10%"><button type="button" id="{{this.id}}">Xóa</button></td>
+                            <td><button type="button" id="{{this.id}}">Xóa</button></td>
                         </tr>
                         {{/each}}
                     </tbody>
                 </table>
+                
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <li class="page-item disabled">
@@ -96,6 +97,8 @@
                     hideLoading();
                     if (res.status == 200) {
                         $('#toast-success-body').html('Thêm thẻ thành công');
+                        $('#q').val('');
+                        apiCallSearch();
                         showToastSuccess();
                     } else {
                         if (res.error.name == 'SequelizeUniqueConstraintError') {
@@ -114,6 +117,49 @@
             })
         }
     })
+    let frmSearch = $('#frmSearch');
+    frmSearch.submit(function(envent){
+        // Ngăn chặn việc tải lại trang khi submit form
+        event.preventDefault();
+        let str = $('#q').val();
+        apiCallSearch(str);
+    });
+    function apiCallSearch(str='',page_number=1){
+        $.ajax({
+            url: `/dashboard/tags/search?index=${page_number}&q=`+str,
+            type: 'GET',
+            success: (res) => {
+                if(res.status=200){
+                fillData(res.data.rows,res.data.count);
+                }else{
+                console.log(res);
+                }
+            },
+            error: (err) => {
+                console.log(res);
+            }
+        })
+    }
+    function fillData(tags,count){
+        $('#total_count').html(count);
+        let tags_table= $('#tags_table');
+        tags_table.empty();
+        tags.forEach((value,index)=>{
+            tags_table.append(rowElement(index,value));
+        })
+    }
+    function rowElement(index,tag){
+        return ` <tr>
+                    <th scope="row">${index+1}</th>
+                    <td>${tag.name}</td>
+                    <td>${tag.link}</td>
+                    <td>${tag.description}</td>
+                    <td><button type="button" id="${tag.id}">Xóa</button></td>
+                </tr>`;
+    }
+    function paginationDom(){
+        
+    }
     //Validate thêm thẻ mới
     $('#frmAddTag').validate({
         rules: {

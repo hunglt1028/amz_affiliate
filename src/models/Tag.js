@@ -1,4 +1,5 @@
 const {Model, DataTypes} = require('sequelize');
+const { Op } = require('sequelize');
 class Tag extends Model {
     static init(sequelize){
         super.init({
@@ -27,6 +28,12 @@ class Tag extends Model {
         },{
             tableName: 'p_tag',
             sequelize,
+            indexes: [
+                {
+                    unique: true,
+                    fields: ['name'] // tạo index trên trường email
+                }
+            ],
             hooks: {
                 //kiểm tra slug tồn tại
                 //beforeCreate: async (tag) => {
@@ -43,6 +50,18 @@ class Tag extends Model {
                 //}
             }
         })
+    }
+    static async getTags(page=1,size=15,str=null){
+        let limit = size;
+        let offset = (page-1)*limit;
+
+        return Tag.findAndCountAll({limit:limit,offset:offset,
+            where:{
+                name: !str ? {[Op.not]:null} : {[Op.like]:`%${str}%`} 
+            },
+            attributes:['id','name','link','description'],
+            order: [['id', 'DESC']]
+        });
     }
 }
 module.exports = Tag;
