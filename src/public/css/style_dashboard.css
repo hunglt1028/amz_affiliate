@@ -123,7 +123,7 @@
 }
 
 body {
-  margin: 0;
+  /*margin: 0;*/
   font-family: var(--cui-body-font-family);
   font-size: var(--cui-body-font-size);
   font-weight: var(--cui-body-font-weight);
@@ -6102,6 +6102,7 @@ html:not([dir=rtl]) .pagination {
 }
 
 .page-link {
+  cursor: pointer;
   position: relative;
   display: block;
   padding: var(--cui-pagination-padding-y) var(--cui-pagination-padding-x);

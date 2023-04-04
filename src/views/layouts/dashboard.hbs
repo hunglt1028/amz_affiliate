@@ -17,7 +17,7 @@
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Łukasz Holeczek">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-    <title>Amazon Affiliate - Bảng tin</title>
+    <title>Amazon Affiliate {{#if title}}- {{title}}{{/if}} </title>
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/public/coreui/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
@@ -32,10 +32,28 @@
 </head>
 
 <body>
-     {{!-- Toast start--}}
+    <div class="modal fade" id="del-modal" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Bạn muốn xóa bản ghi này à.</h5>
+                    <button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bản ghi số abc.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-coreui-dismiss="modal">Không</button>
+                    <button class="btn btn-primary" type="button">Chứ đéo gì nữa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{!-- Toast start--}}
     <div aria-live="polite" aria-atomic="true" class="position-relative">
         <div class="toast-container top-0 end-0 p-3">
-        {{!-- Success --}}
+            {{!-- Success --}}
             <div id="toast-success" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header text-bg-success">
                     <i class="cil-check-alt"></i>
@@ -62,7 +80,7 @@
         </div>
     </div>
     {{!-- Toast end --}}
-    
+
     {{!-- Loading start--}}
     <div id="loading" class="loading">
         <button class="btn btn-primary" type="button" disabled>
@@ -143,7 +161,8 @@
                         <use xlink:href="/public/coreui/icons/svg/free.svg#cil-star"></use>
                     </svg> Thành viên</a>
                 <ul class="nav-group-items">
-                    <li class="nav-item"><a class="nav-link" href="icons/coreui-icons-free.html">Tất cả người dùng</a>
+                    <li class="nav-item"><a class="nav-link" href="icons/coreui-icons-free.html">Tất cả người
+                            dùng</a>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="icons/coreui-icons-brand.html">Thêm mới</a></li>
                 </ul>

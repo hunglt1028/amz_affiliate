@@ -3,6 +3,8 @@ const Constants ={
         LOGIN:'Đăng nhập',
         HOME:'Trang chủ',
         FORGOT_PASS:'Quên mật khẩu',
+        DASHBOARD_CATEGORY:'Chuyên mục',
+        DASHBOARD_TAG:'Thẻ'
     },
     layout:{
         AUTH:'auth.hbs',
@@ -10,6 +12,8 @@ const Constants ={
         DASHBOARD:'dashboard.hbs',
     },
     page:{
+        DASHBOARD_TAG:'dashboard/tags',
+        DASHBOARD_CATEGORY:'dashboard/category',
         LOGIN:'./auth/login',
         FORGOT_PASS:'auth/forgot_password',
         HOME:'home'

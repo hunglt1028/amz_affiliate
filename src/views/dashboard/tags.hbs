@@ -53,35 +53,64 @@
                     <tbody id="tags_table">
                         {{#each data.tags}}
                         <tr>
-                            <th scope="row">{{@index}}</th>
+                            <th scope="row">{{add @index 1}}</th>
                             <td>{{this.name}}</td>
                             <td>{{this.link}}</td>
                             <td>{{this.description}}</td>
-                            <td><button type="button" id="{{this.id}}">Xóa</button></td>
+                            <td><a class="delete-button" data-coreui-toggle="modal" data-coreui-target="#del-modal" href="#"><svg class="icon">
+                                        <use xlink:href="/public/coreui/icons/svg/free.svg#cil-trash"></use>
+                                    </svg></a>
+                            </td>
                         </tr>
                         {{/each}}
                     </tbody>
                 </table>
-                
+
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <li class="page-item disabled">
-                            <a class="page-link"><<</a>
+                            <a class="page-link">
+                                << </a>
                         </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        {{#forn data.totalPage}}
+                        <li class="page-item"><a class="page-link" page="{{index}}">{{index}}</a></li>
+                        {{/forn}}
                         <li class="page-item">
-                            <a class="page-link" href="#">>></a>
+                            <a class="page-link" page="{{data.totalPage}}">>></a>
                         </li>
                     </ul>
                 </nav>
             </div>
         </div>
     </div>
-
 </div>
 <script>
+    
+    $(document).ready(function () {
+        // Hiển thị popup confirm khi click vào button xóa
+        $('.delete-button').on('click', function (e) {
+            e.preventDefault();
+            $('#exampleModalCenter').show();
+        });
+
+        // Ẩn popup confirm khi click vào button Không hoặc bất kỳ vị trí nào khác trên popup
+        $('#confirm-no, #confirm-popup').on('click', function () {
+            $('#confirm-popup').hide();
+        });
+
+        // Thực hiện xóa khi click vào button Có
+        $('#confirm-yes').on('click', function () {
+            // Code xóa ở đây
+            // ...
+            // Ẩn popup confirm
+            $('#confirm-popup').hide();
+        });
+    });
+    //page link click
+    $('.page-link').click(function (e) {
+        e.preventDefault()
+        let page_index = $(this).attr('page');
+    })
     //Gửi yêu cầu thêm mới
     $('#btn-add-tag').click(function () {
         if ($('#frmAddTag').valid()) {
@@ -118,21 +147,21 @@
         }
     })
     let frmSearch = $('#frmSearch');
-    frmSearch.submit(function(envent){
+    frmSearch.submit(function (envent) {
         // Ngăn chặn việc tải lại trang khi submit form
         event.preventDefault();
         let str = $('#q').val();
         apiCallSearch(str);
     });
-    function apiCallSearch(str='',page_number=1){
+    function apiCallSearch(str = '', page_number = 1) {
         $.ajax({
-            url: `/dashboard/tags/search?index=${page_number}&q=`+str,
+            url: `/dashboard/tags/search?index=${page_number}&q=` + str,
             type: 'GET',
             success: (res) => {
-                if(res.status=200){
-                fillData(res.data.rows,res.data.count);
-                }else{
-                console.log(res);
+                if (res.status = 200) {
+                    fillData(res.data.rows, res.data.count);
+                } else {
+                    console.log(res);
                 }
             },
             error: (err) => {
@@ -140,25 +169,25 @@
             }
         })
     }
-    function fillData(tags,count){
+    function fillData(tags, count) {
         $('#total_count').html(count);
-        let tags_table= $('#tags_table');
+        let tags_table = $('#tags_table');
         tags_table.empty();
-        tags.forEach((value,index)=>{
-            tags_table.append(rowElement(index,value));
+        tags.forEach((value, index) => {
+            tags_table.append(rowElement(index, value));
         })
     }
-    function rowElement(index,tag){
+    function rowElement(index, tag) {
         return ` <tr>
-                    <th scope="row">${index+1}</th>
+                    <th scope="row">${index + 1}</th>
                     <td>${tag.name}</td>
                     <td>${tag.link}</td>
                     <td>${tag.description}</td>
                     <td><button type="button" id="${tag.id}">Xóa</button></td>
                 </tr>`;
     }
-    function paginationDom(){
-        
+    function paginationDom() {
+
     }
     //Validate thêm thẻ mới
     $('#frmAddTag').validate({
