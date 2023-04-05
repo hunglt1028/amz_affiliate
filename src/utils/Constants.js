@@ -21,7 +21,8 @@ const Constants ={
     redirect:{
         DASHBOARD:'/dashboard',
         LOGIN:'/auth/login',
-        HOME:'/'
+        HOME:'/',
+        DASHBOARD_TAGS:'/dashboard/tags'
     }
 }
 module.exports = Constants;

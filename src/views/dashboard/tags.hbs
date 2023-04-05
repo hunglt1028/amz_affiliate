@@ -1,4 +1,4 @@
-<div class="row" style="padding-left: 10px;">
+<div class="row m-0 p-0" style="padding-left: 10px;">
     <div class="col-4">
         <form id="frmAddTag">
             <h3>Thêm thẻ</h3>
@@ -22,95 +22,220 @@
                 <textarea class="form-control mt-md-2" name="description" id="description"
                     aria-describedby="descriptionHelp"></textarea>
             </div>
-            <button type="button" id="btn-add-tag" class="btn btn-outline-success mt-md-3">Thêm thẻ</button>
+            <button type="button" id="btn-add-tag" class="btn btn-outline-success mt-md-3 mb-1">Thêm thẻ</button>
         </form>
     </div>
     <div class="col-8">
-        <form id="frmSearch" class="row g-2">
-            <div class="col-auto">
-                <input type="text" name="q" class="form-control" id="q">
+        {{!-- Search start --}}
+        <nav class="navbar navbar-expand-lg bg-light p-0">
+            <div class="container-fluid">
+                <div class="navbar-collapse">
+                    <div class="me-auto mb-2 mb-lg-0">
+                    </div>
+                    <form id="frmSearch" class="row g-2 d-flex">
+                        <div class="col-auto">
+                            <input type="text" name="q" class="form-control" id="q" value="{{data.q}}">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" id="btn-search" class="btn btn-outline-info mb-2">Tìm thẻ</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-outline-info mb-2">Tìm thẻ</button>
+        </nav>
+        {{!-- Search end --}}
+        {{!-- Navigation top start --}}
+        <nav>
+            {{!-- Action top start --}}
+            <div class="float-start">
+                <div class="float-start ">
+                    <select class="form-select max-width-130 float-start mr-1" id="action-select-1">
+                        <option selected="" value="none">Hành động</option>
+                        <option value="del">Xóa</option>
+                    </select>
+                    <button type="submit" class="btn btn-outline-info float-start jsbtn_action">Áp dụng</button>
+                </div>
             </div>
-        </form>
-        {{!--<form class="d-flex">
-            <input class="form-control me-1" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>--}}
-        <div class="border tab-content rounded-bottom">
-            <div class="tab-pane p-3 active preview" role="tabpanel">
-                <table class="table table-striped">
+            {{!-- Action top end --}}
+            {{!-- Pagination top start --}}
+            {{#ifcond data.totalPage '>' 1}}
+            <ul class="pagination my-1 float-end">
+                <li class="page-first page-item {{#ifcond data.paged '<=' 1}}disabled{{/ifcond}}">
+                    <a class="page-link" paged="1">«</a>
+                </li>
+                <li class="page-pre page-item {{#ifcond data.paged '<=' 1}}disabled{{/ifcond}}">
+                    <a class="page-link" paged="{{sub data.paged 1}}">‹</a>
+                </li>
+                <li class="page-item max-width-50 ">
+                    <div class="row g-2 d-flex">
+                        <div class="col-auto">
+                            <input type="text" name="index-page-1" class="page-index form-control pd-025-075"
+                                value="{{data.paged}}" id="input-pageindex-1">
+                        </div>
+                    </div>
+                </li>
+                <li class="page-item disabled"><a class="page-link">trên {{data.totalPage}}</a></li>
+                <li class="page-next page-item {{#ifcond data.paged '>=' data.totalPage}}disabled{{/ifcond}}">
+                    <a class="page-link" paged="{{add data.paged 1}}">›</a>
+                </li>
+                <li class="page-last page-item {{#ifcond data.paged '>=' data.totalPage}}disabled{{/ifcond}}">
+                    <a class="page-link" paged="{{data.totalPage}}">»</a>
+                </li>
+            </ul>
+            {{/ifcond}}
+            <div class="float-end total-items mx-1 total-count">{{data.totalCount}} mục</div>
+            {{!-- Pagination top end --}}
+        </nav>
+        {{!-- Navigation top end --}}
+        <div class="border tab-content rounded-bottom table-responsive clear-both">
+            {{!-- Table data start --}}
+            <form id="frmRecord" action="/dashboard/tags/del" method="post">
+                <table class="table table-striped table-bordered">
                     <thead>
-                        <tr>
-                            <th id="total_count" scope="col">{{data.totalCount}}</th>
+                        <tr class="">
+                            <th id="total_count" style="width: 15px;" scope="col"><input type="checkbox"
+                                    class="check-all form-check-input">
+                            </th>
                             <th scope="col">Tên thẻ</th>
                             <th scope="col">Đường dẫn</th>
                             <th scope="col">Mô tả</th>
-                            <th scope="col">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody id="tags_table">
+
                         {{#each data.tags}}
                         <tr>
-                            <th scope="row">{{add @index 1}}</th>
+                            <th style="width:15px" class="" scope="row"><input type="checkbox"
+                                    class="checkbox form-check-input" name="items[]" value="{{this.id}}">
+                            </th>
                             <td>{{this.name}}</td>
                             <td>{{this.link}}</td>
                             <td>{{this.description}}</td>
-                            <td><a class="delete-button" data-coreui-toggle="modal" data-coreui-target="#del-modal" href="#"><svg class="icon">
-                                        <use xlink:href="/public/coreui/icons/svg/free.svg#cil-trash"></use>
-                                    </svg></a>
-                            </td>
                         </tr>
                         {{/each}}
+                        {{#ifcond data.totalCount '==' 0}}
+                        <tr id="emty_record">
+                            <th colspan="4" class="text-center">Không có dữ liệu</th>
+                        </tr>
+                        {{/ifcond}}
                     </tbody>
                 </table>
-
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link">
-                                << </a>
-                        </li>
-                        {{#forn data.totalPage}}
-                        <li class="page-item"><a class="page-link" page="{{index}}">{{index}}</a></li>
-                        {{/forn}}
-                        <li class="page-item">
-                            <a class="page-link" page="{{data.totalPage}}">>></a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            </form>
+            {{!-- Table data end --}}
+            {{!-- Navigation bot start --}}
+            <nav>
+                {{!-- Action bot start --}}
+                <div class="float-start ">
+                    <select class="form-select max-width-130 float-start mr-1" id="action-select-2">
+                        <option selected="" value="none">Hành động</option>
+                        <option value="del">Xóa</option>
+                    </select>
+                    <button type="submit" class="btn btn-outline-info float-start jsbtn_action">Áp dụng</button>
+                </div>
+                {{!-- Action bot end --}}
+                {{!-- Pagination bot start --}}
+                {{#ifcond data.totalPage '>' 1}}
+                <ul class="pagination my-1 float-end">
+                    <li class="page-first page-item {{#ifcond data.paged '<=' 1}}disabled{{/ifcond}}">
+                        <a class="page-link" paged="1">«</a>
+                    </li>
+                    <li class="page-pre page-item {{#ifcond data.paged '<=' 1}}disabled{{/ifcond}}">
+                        <a class="page-link" paged="{{sub data.paged 1}}">‹</a>
+                    </li>
+                    <li class="page-item max-width-50 ">
+                        <div class="row g-2 d-flex">
+                            <div class="col-auto">
+                                <input type="text" name="index-page-2" class="page-index form-control pd-025-075"
+                                    value="{{data.paged}}" id="input-pageindex-2">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="page-item disabled"><a class="page-link">trên {{data.totalPage}}</a></li>
+                    <li class="page-next page-item {{#ifcond data.paged '>=' data.totalPage}}disabled{{/ifcond}}">
+                        <a class="page-link" paged="{{add data.paged 1}}">›</a>
+                    </li>
+                    <li class="page-last page-item {{#ifcond data.paged '>=' data.totalPage}}disabled{{/ifcond}}">
+                        <a class="page-link" paged="{{data.totalPage}}">»</a>
+                    </li>
+                </ul>
+                {{/ifcond}}
+                <div class="float-end total-items mx-1 total-count">{{data.totalCount}} mục</div>
+                {{!-- Pagination bot end --}}
+            </nav>
+            {{!-- Navigation bot end --}}
         </div>
+
     </div>
 </div>
 <script>
-    
     $(document).ready(function () {
-        // Hiển thị popup confirm khi click vào button xóa
-        $('.delete-button').on('click', function (e) {
-            e.preventDefault();
-            $('#exampleModalCenter').show();
+        $('.jsbtn_action').click(function () {
+            let action_name = $('#action-select-1').val();
+            if (!action_name || action_name == 'none' || $('.checkbox:checked').length <= 0)
+                return;
+            $('#frmRecord').submit();
+        })
+        //Thay đổi hành động ở 2 select
+        $('#action-select-1').change(function () {
+            var value = $(this).val();
+            $('#action-select-2').val(value);
+        });
+        $('#action-select-2').change(function () {
+            var value = $(this).val();
+            $('#action-select-1').val(value);
         });
 
-        // Ẩn popup confirm khi click vào button Không hoặc bất kỳ vị trí nào khác trên popup
-        $('#confirm-no, #confirm-popup').on('click', function () {
-            $('#confirm-popup').hide();
+        //Thay đổi page input page index
+        $('#input-pageindex-1').on('keyup', function (e) {
+            if (e.keyCode === 13) {
+                $('#btn-search').click();
+            }
+            var value = $(this).val();
+            $('#input-pageindex-2').val(value);
         });
-
-        // Thực hiện xóa khi click vào button Có
-        $('#confirm-yes').on('click', function () {
-            // Code xóa ở đây
-            // ...
-            // Ẩn popup confirm
-            $('#confirm-popup').hide();
+        $('#input-pageindex-2').on('keyup', function (e) {
+            if (e.keyCode === 13) {
+                $('#btn-search').click();
+            }
+            var value = $(this).val();
+            $('#input-pageindex-1').val(value);
         });
+        initEventCheckbox()
     });
     //page link click
     $('.page-link').click(function (e) {
         e.preventDefault()
-        let page_index = $(this).attr('page');
+        let q = $('#q').val() || '';
+        let paged = $(this).attr('paged');
+        if (!paged || isNaN(paged))
+            paged = 1;
+        window.location.href = `/dashboard/tags?paged=${paged}&q=` + q;
     })
+    function initEventCheckbox() {
+        //chọn bản ghi
+        // Bắt sự kiện click cho checkbox all
+        $('.check-all').click(function () {
+            // Nếu checkbox all được chọn
+            if ($(this).is(':checked')) {
+                // Chọn tất cả các checkbox con
+                $('.checkbox').prop('checked', true);
+            } else {
+                // Bỏ chọn tất cả các checkbox con
+                $('.checkbox').prop('checked', false);
+            }
+        });
+        // Bắt sự kiện click cho các checkbox con
+        $('.checkbox').click(function () {
+            // Nếu có bất kỳ checkbox con nào không được chọn
+            if ($('.checkbox:not(:checked)').length) {
+                // Bỏ chọn checkbox all
+                $('.check-all').prop('checked', false);
+            } else {
+                // Chọn checkbox all
+                $('.check-all').prop('checked', true);
+            }
+        });
+    }
     //Gửi yêu cầu thêm mới
     $('#btn-add-tag').click(function () {
         if ($('#frmAddTag').valid()) {
@@ -127,8 +252,10 @@
                     if (res.status == 200) {
                         $('#toast-success-body').html('Thêm thẻ thành công');
                         $('#q').val('');
-                        apiCallSearch();
+                        let tags_table = $('#tags_table');
+                        tags_table.prepend(rowElement(res.data));
                         showToastSuccess();
+                        $('#emty_record').remove();
                     } else {
                         if (res.error.name == 'SequelizeUniqueConstraintError') {
                             $('#toast-error-body').html('Tên thẻ đã tồn tại');
@@ -150,44 +277,21 @@
     frmSearch.submit(function (envent) {
         // Ngăn chặn việc tải lại trang khi submit form
         event.preventDefault();
-        let str = $('#q').val();
-        apiCallSearch(str);
+        let q = $('#q').val() || '';
+        let paged = $('#input-pageindex-1').val();
+        if (!paged || isNaN(paged))
+            paged = 1;
+        window.location.href = `/dashboard/tags?paged=${paged}&q=` + q;
     });
-    function apiCallSearch(str = '', page_number = 1) {
-        $.ajax({
-            url: `/dashboard/tags/search?index=${page_number}&q=` + str,
-            type: 'GET',
-            success: (res) => {
-                if (res.status = 200) {
-                    fillData(res.data.rows, res.data.count);
-                } else {
-                    console.log(res);
-                }
-            },
-            error: (err) => {
-                console.log(res);
-            }
-        })
-    }
-    function fillData(tags, count) {
-        $('#total_count').html(count);
-        let tags_table = $('#tags_table');
-        tags_table.empty();
-        tags.forEach((value, index) => {
-            tags_table.append(rowElement(index, value));
-        })
-    }
-    function rowElement(index, tag) {
+    function rowElement(tag) {
         return ` <tr>
-                    <th scope="row">${index + 1}</th>
+                     <th style="width:15px" class="" scope="row"><input type="checkbox"
+                                    class="checkbox form-check-input" name="items[]" value="${tag.id}">
+                    </th>
                     <td>${tag.name}</td>
                     <td>${tag.link}</td>
                     <td>${tag.description}</td>
-                    <td><button type="button" id="${tag.id}">Xóa</button></td>
                 </tr>`;
-    }
-    function paginationDom() {
-
     }
     //Validate thêm thẻ mới
     $('#frmAddTag').validate({

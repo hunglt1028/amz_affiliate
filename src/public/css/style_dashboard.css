@@ -6069,8 +6069,8 @@ html:not([dir=rtl]) .breadcrumb-item+.breadcrumb-item::before {
 }
 
 .pagination {
-  --cui-pagination-padding-x: 0.75rem;
-  --cui-pagination-padding-y: 0.375rem;
+  --cui-pagination-padding-x: 0.5rem;
+  --cui-pagination-padding-y: 0.25rem;
   --cui-pagination-font-size: 1rem;
   --cui-pagination-color: var(--cui-link-color);
   --cui-pagination-bg: #fff;
@@ -6109,8 +6109,8 @@ html:not([dir=rtl]) .pagination {
   font-size: var(--cui-pagination-font-size);
   color: var(--cui-pagination-color);
   text-decoration: none;
-  background-color: var(--cui-pagination-bg);
-  border: var(--cui-pagination-border-width) solid var(--cui-pagination-border-color);
+  /*background-color: var(--cui-pagination-bg);*/
+  /*border: var(--cui-pagination-border-width) solid var(--cui-pagination-border-color);*/
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -6139,16 +6139,16 @@ html:not([dir=rtl]) .pagination {
 .active>.page-link {
   z-index: 3;
   color: var(--cui-pagination-active-color);
-  background-color: var(--cui-pagination-active-bg);
-  border-color: var(--cui-pagination-active-border-color);
+  /*background-color: var(--cui-pagination-active-bg);
+  border-color: var(--cui-pagination-active-border-color);*/
 }
 
 .page-link.disabled,
 .disabled>.page-link {
   color: var(--cui-pagination-disabled-color);
   pointer-events: none;
-  background-color: var(--cui-pagination-disabled-bg);
-  border-color: var(--cui-pagination-disabled-border-color);
+  /*background-color: var(--cui-pagination-disabled-bg);
+  border-color: var(--cui-pagination-disabled-border-color);*/
 }
 
 html:not([dir=rtl]) .page-item:not(:first-child) .page-link {
@@ -16704,5 +16704,36 @@ html:not([dir=rtl]) .wrapper {
   left: 50%;
   top: 50%;
   z-index: 100000;
+  display: none;
+}
+.clear-both{
+  clear: both !important;
+}
+.total-items{
+  line-height: 40px;
+  font-size: var(--cui-body-font-size);
+}
+.max-width-50{
+  max-width: 50px;
+}
+.max-width-130{
+  max-width: 130px;
+}
+.pd-025-075{
+  padding: 0.25rem 0.75rem !important;
+}
+.page-item{
+  margin: 0px;
+}
+.flex{
+  display: flex;
+}
+.mr-1{
+  margin-right: 10px;
+}
+.mt-1{
+  margin-bottom: 10px;
+}
+.hide{
   display: none;
 }

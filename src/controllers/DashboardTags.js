@@ -3,35 +3,27 @@ const dataRes= require('../utils/ResponseDO');
 const STATUS = require('../utils/Status');
 const MESSAGES = require('../utils/Messages');
 const {slugConvert} = require('../utils/Common');
+const { Op } = require('sequelize');
 const Tag = require('../models/Tag');
 class DashboardTags{
-    static pageSize=6;
+    static pageSize=15;
     async getIndex(req,res){
-        let pageIndex=1
-        let tags= await Tag.getTags(pageIndex,DashboardTags.pageSize,null);
-        let listTag= tags.rows.map(tag=>tag.get({plain:true}));
-        let totalCount = tags.count;
-        let totalPage=Math.ceil(totalCount/DashboardTags.pageSize);
-        let data={};
-        data.tags=listTag;
-        data.totalCount=totalCount;
-        data.totalPage=totalPage
-        res.render(constants.page.DASHBOARD_TAG,{layout:constants.layout.DASHBOARD,data:data});
-    }
-    async search(req,res){
         try {
             let q= req.query.q ?? '';
-            let index = req.query.index ?? 1;
-            let tags = await Tag.getTags(index, DashboardTags.pageSize, q);    
-            dataRes.status = STATUS.SUSCCESS;
-            dataRes.data=tags;
-            return res.json(dataRes);
-
+            let paged = req.query.paged ?? 1;
+            let tags= await Tag.getTags(paged,DashboardTags.pageSize,q);
+            let listTag= tags.rows.map(tag=>tag.get({plain:true}));
+            let totalCount = tags.count;
+            let totalPage=Math.ceil(totalCount/DashboardTags.pageSize);
+            let data={};
+            data.tags=listTag;
+            data.totalCount=totalCount;
+            data.totalPage=totalPage;
+            data.q= q;
+            data.paged=paged;
+            res.render(constants.page.DASHBOARD_TAG,{layout:constants.layout.DASHBOARD,data:data});   
         } catch (error) {
             console.log(error);
-            dataRes.status = STATUS.ERROR_SERVER;
-            dataRes.error = error;
-            return res.json(dataRes);
         }
     }
     async postAdd(req,res){
@@ -55,14 +47,15 @@ class DashboardTags{
     }
     async postDel(req, res){
         try {
-            let {id}= req.body;
-            await Tag.destroy({where:{id:id}});
+            let {items}= req.body;
+            await Tag.destroy({where:{id:{[Op.in]:items}}});
+            console.log('items',items);
             dataRes.status = STATUS.SUSCCESS;
-            return res.json(dataRes);
+            console.log('items',items);
+            return res.redirect(constants.redirect.DASHBOARD_TAGS);
         } catch (error) {
-            dataRes.status=STATUS.BAD_REQ;
-            dataRes.error=error;
-            return res.json(dataRes);
+            console.log('error',error);
+            return res.redirect(constants.redirect.DASHBOARD_TAGS);
         }
     }
 }
