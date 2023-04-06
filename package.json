@@ -2,10 +2,10 @@
   "name": "amz_affiliate",
   "version": "1.0.0",
   "description": "Amazon Affiliate",
-  "main": "Server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon Server.js",
-    "initDB": "node ./src/migrates/Init.js",
+    "start": "nodemon server.js",
+    "initdb": "node ./app/migrates/init.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "hunglt",
