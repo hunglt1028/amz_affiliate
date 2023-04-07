@@ -61,9 +61,9 @@ class AdminTagController{
         try {
             let id= req.query.id;
             let tag= await TagModel.findByPk(id);
-            data.tag
+            
             res_do_util.status = status_util.SUSCCESS;
-            return res.redirect(constant_util.redirect.ADMIN_TAGS);
+            return res.render(constant_util.page.ADMIN_TAG_UPDATE,{layout:constant_util.layout.ADMIN,data:res_do_util,title:constant_util.title.ADMIN_TAG_UPDATE});
         } catch (error) {
             console.log('error',error);
             return res.redirect(constant_util.redirect.ADMIN_TAGS);

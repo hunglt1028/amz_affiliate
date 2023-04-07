@@ -4,7 +4,8 @@ const Constants ={
         HOME:'Trang chủ',
         FORGOT_PASS:'Quên mật khẩu',
         ADMIN_CATEGORY:'Chuyên mục',
-        ADMIN_TAG:'Thẻ'
+        ADMIN_TAG:'Thẻ',
+        ADMIN_TAG_UPDATE:'Cập nhật thẻ'
     },
     layout:{
         LOGIN:'login.hbs',
@@ -14,6 +15,7 @@ const Constants ={
     page:{
         ADMIN:'admin/index',
         ADMIN_TAG:'admin/tag/index',
+        ADMIN_TAG_UPDATE:'admin/tag/update',
         ADMIN_CATEGORY:'admin/category',
         LOGIN:'./login/index',
         FORGOT_PASS:'/login/forgot_password',

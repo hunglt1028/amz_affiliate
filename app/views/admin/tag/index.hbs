@@ -108,7 +108,18 @@
                             <th style="width:15px" class="" scope="row"><input type="checkbox"
                                     class="checkbox form-check-input" name="items[]" value="{{this.id}}">
                             </th>
-                            <td>{{this.name}}</td>
+                            <td> 
+                                <strong>
+                                    <a class="row-title">
+                                        {{this.name}}
+                                    </a>
+                                </strong><br>
+                                <div class="row-actions">
+                                    <span class="edit">Sửa  | </span>
+                                    <span class="delete">Xóa  | </span>
+                                    <span class="view">Xem </span>
+                                </div>
+                            </td>
                             <td>{{this.link}}</td>
                             <td>{{this.description}}</td>
                         </tr>

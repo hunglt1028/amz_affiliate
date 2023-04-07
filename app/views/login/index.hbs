@@ -1,4 +1,4 @@
-<section class="full-height volunteer-section section-padding" id="section_4">
+{{!--<section class="full-height volunteer-section section-padding" id="section_4">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-6 col-lg-8 col-md-10 col-12 text-center">
@@ -23,5 +23,42 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div>--}}
 </section>
+<div id="login">
+    {{#if data.error}}
+    <div class="alert alert-danger" role="alert">
+        <div id="login_error"> <strong>Error:</strong> {{data.error}}.<br></div>
+    </div>
+    {{/if}}
+    <form name="loginform" id="loginform" action="login" method="post">
+        <p>
+            <label for="user_login">Địa chỉ Email</label>
+            <input type="text" name="log" id="user_login" class="input" value="" size="20" autocapitalize="off"
+                autocomplete="username">
+        </p>
+        <div class="user-pass-wrap">
+            <label for="user_pass">Mật khẩu</label>
+            <div class="wp-pwd">
+                <input type="password" name="pwd" id="user_pass" class="input password-input" value="" size="20"
+                    autocomplete="current-password" spellcheck="false">
+                <button type="button" class="button button-secondary wp-hide-pw hide-if-no-js" data-toggle="0"
+                    aria-label="Hiện mật khẩu">
+                    <span class="dashicons dashicons-visibility" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        {{!--<p class="forgetmenot"><input name="rememberme" type="checkbox" id="rememberme" value="forever"> <label
+                for="rememberme">Tự động đăng nhập</label></p>--}}
+        <p class="submit">
+            <input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large"
+                value="Đăng nhập">
+            <input type="hidden" name="redirect_to" value="/admin">
+            <input type="hidden" name="testcookie" value="1">
+        </p>
+    </form>
+
+    {{!--<p id="nav">
+        <a href="http://localhost/wp-login.php?action=lostpassword">Bạn quên mật khẩu?</a>
+    </p>--}}
+</div>
