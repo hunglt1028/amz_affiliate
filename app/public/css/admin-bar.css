@@ -197,7 +197,7 @@ html:lang(he-il) .rtl #wpadminbar * {
 }
 
 #wpadminbar.nojs li:hover > .ab-sub-wrapper,
-#wpadminbar li:hover > .ab-sub-wrapper {
+#wpadminbar li.hover > .ab-sub-wrapper {
 	display: block;
 }
 
