@@ -1,5 +1,5 @@
 module.exports ={
-    port:80,
+    port:8080,
     ip:'192.168.100.113',
     app:{
         id:'amz_affiliate',

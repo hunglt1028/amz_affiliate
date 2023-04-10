@@ -1551,7 +1551,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
 };
 
 ;// CONCATENATED MODULE: external ["wp","hooks"]
-var external_wp_hooks_namespaceObject = window["wp"]["hooks"];
+var external_wp_hooks_namespaceObject =undefined;
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/default-i18n.js
 /**
  * Internal dependencies
@@ -1562,7 +1562,7 @@ var external_wp_hooks_namespaceObject = window["wp"]["hooks"];
  */
 
 
-const i18n = createI18n(undefined, undefined, external_wp_hooks_namespaceObject.defaultHooks);
+const i18n = createI18n(undefined, undefined,undefined);
 /**
  * Default, singleton instance of `I18n`.
  */
