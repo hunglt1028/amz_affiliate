@@ -16,7 +16,7 @@ class CategoryModel extends Model {
                 type: DataTypes.BOOLEAN,
                 defaultValue:true
             },
-            link:{
+            slug:{
                 type:DataTypes.STRING,
                 allowNull:false,
             },

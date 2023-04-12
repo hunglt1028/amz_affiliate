@@ -4,6 +4,7 @@ const admin_tag_controller = require('../controllers/admin.tag.controller');
 
 router.post('/create',admin_tag_controller.post_create);
 router.post('/delete',admin_tag_controller.post_delete);
+router.post('/action',admin_tag_controller.post_action);
 router.post('/update',admin_tag_controller.post_update);
 
 router.get('/update',admin_tag_controller.get_update);

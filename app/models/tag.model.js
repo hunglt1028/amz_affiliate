@@ -17,7 +17,7 @@ class TagModel extends Model {
                 type: DataTypes.BOOLEAN,
                 defaultValue:true
             },
-            link:{
+            slug:{
                 type: DataTypes.STRING,
                 allowNull:false,
             },
@@ -59,7 +59,7 @@ class TagModel extends Model {
             where:{
                 name: !str ? {[Op.not]:null} : {[Op.like]:`%${str}%`} 
             },
-            attributes:['id','name','link','description'],
+            attributes:['id','name','slug','description'],
             order: [['id', 'DESC']]
         });
     }

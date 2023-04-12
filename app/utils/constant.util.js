@@ -25,7 +25,7 @@ const Constants ={
         ADMIN:'/admin',
         LOGIN:'/login',
         HOME:'/',
-        ADMIN_TAGS:'/admin/tags'
+        ADMIN_TAGS:'/admin/tag'
     }
 }
 module.exports = Constants;

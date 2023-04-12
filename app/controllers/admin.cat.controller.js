@@ -14,16 +14,16 @@ class AdminCatController {
     }
     async postAdd(req, res) {
         try {
-            let { name, link, description, parent } = req.body;
-            if (!name || !link) {
+            let { name, slug, description, parent } = req.body;
+            if (!name || !slug) {
                 dataRes.status = STATUS.BAD_REQ;
                 dataRes.error = MESSAGES.ERR_CATEGORY_ADD_REQIRED;
                 return res.json(dataRes);
             }
-            link = slugConvert(link);
-            let cat = await Category.create({ name: name, link: link, description: description, parent: parent });
+            slug = slugConvert(slug);
+            let cat = await Category.create({ name: name, slug: slug, description: description, parent: parent });
             dataRes.status = STATUS.SUSCCESS;
-            dataRes.data = { 'id': cat.id, 'name': cat.name, 'link': cat.link, 'description': cat.description, 'parent': cat.parent };
+            dataRes.data = { 'id': cat.id, 'name': cat.name, 'slug': cat.slug, 'description': cat.description, 'parent': cat.parent };
             return res.json(dataRes);
         } catch (error) {
             dataRes.status = STATUS.BAD_REQ;

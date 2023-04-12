@@ -1,331 +1,203 @@
-<div class="row m-0 p-0" style="padding-left: 10px;">
-    <div class="col-4">
-        <form id="frmAddTag">
-            <h3>Thêm thẻ</h3>
-            <div class="form-group">
-                <label for="name" class="mt-md-2">Tên*</label>
-                <small id="nameHelp" class="form-text text-muted"> (Tên riêng sẽ hiển thị trên trang mạng của
-                    bạn).</small>
-                <input type="text" class="form-control mt-md-2" id="name" name="name" aria-describedby="nameHelp">
-            </div>
-            <div class="form-group">
-                <label for="link" class="mt-md-2">Đường dẫn*</label>
-                <small id="linkHelp" class="form-text text-muted">Chuỗi cho đường dẫn tĩnh là phiên bản của tên hợp
-                    chuẩn với Đường dẫn (URL). Chuỗi này bao gồm chữ cái thường, sô và dấu gạch ngang(-)</small>
-                <input type="text" class="form-control mt-md-2" name="link" id="link" aria-describedby="linkHelp">
-            </div>
-            <div class="form-group">
-                <label for="description" class="mt-md-2">Mô tả</label>
-                <small id="descriptionHelp" class="form-text text-muted">(Thông thường mô tả này không được sử dụng
-                    trong
-                    các giao diện, tuy nhiên có vài giao diện có thể hiển thị mô tả này)</small>
-                <textarea class="form-control mt-md-2" name="description" id="description"
-                    aria-describedby="descriptionHelp"></textarea>
-            </div>
-            <button type="button" id="btn-add-tag" class="btn btn-outline-success mt-md-3 mb-1">Thêm thẻ</button>
-        </form>
-    </div>
-    <div class="col-8">
-        {{!-- Search start --}}
-        <nav class="navbar navbar-expand-lg bg-light p-0">
-            <div class="container-fluid">
-                <div class="navbar-collapse">
-                    <div class="me-auto mb-2 mb-lg-0">
-                    </div>
-                    <form id="frmSearch" class="row g-2 d-flex">
-                        <div class="col-auto">
-                            <input type="text" name="q" class="form-control" id="q" value="{{data.q}}">
+<div class="wrap nosubsub">
+    <h1 class="wp-heading-inline">Thẻ</h1>
+    <hr class="wp-header-end">
+    <div id="ajax-response"></div>
+    <form class="search-form wp-clearfix" method="get">
+        <p class="search-box">
+            <input type="search" id="tag-search-input" name="s" value="{{data.s}}">
+            <input type="submit" id="search-submit" class="button" value="Tìm Thẻ">
+        </p>
+
+    </form>
+    <div id="col-container" class="wp-clearfix">
+        <div id="col-left">
+            <div class="col-wrap">
+                <div class="form-wrap">
+                    <h2>Thêm thẻ</h2>
+                    <form id="addtag" method="post" class="validate">
+                        <div class="form-field form-required term-name-wrap">
+                            <label for="tag-name">Tên *</label>
+                            <input name="tag_name" id="tag_name" type="text" value="" size="40" aria-required="true"
+                                aria-describedby="name-description">
+                            <p id="name-description">Tên riêng sẽ hiển thị trên trang mạng của bạn.</p>
                         </div>
-                        <div class="col-auto">
-                            <button type="submit" id="btn-search" class="btn btn-outline-info mb-2">Tìm thẻ</button>
+                        <div class="form-field term-slug-wrap">
+                            <label for="tag_slug">Đường dẫn *</label>
+                            <input name="tag_slug" id="tag_slug" type="text" value="" size="40"
+                                aria-describedby="slug-description">
+                            <p id="slug-description">Chuỗi cho đường dẫn tĩnh là phiên bản của tên hợp chuẩn với Đường
+                                dẫn (URL). Chuỗi này bao gồm chữ cái thường, số và dấu gạch ngang (-).</p>
                         </div>
+                        <div class="form-field term-description-wrap">
+                            <label for="tag-description">Mô tả</label>
+                            <textarea name="tag_description" id="tag_description" rows="5" cols="40"
+                                aria-describedby="description-description"></textarea>
+                            <p id="description-description">Thông thường mô tả này không được sử dụng trong các giao
+                                diện, tuy nhiên có vài giao diện có thể hiển thị mô tả này.</p>
+                        </div>
+
+                        <p class="submit">
+                            <input type="submit" name="submit" id="submit" class="button button-primary"
+                                value="Thêm thẻ"> <span class="spinner"></span>
+                        </p>
                     </form>
                 </div>
             </div>
-        </nav>
-        {{!-- Search end --}}
-        {{!-- Navigation top start --}}
-        <nav>
-            {{!-- Action top start --}}
-            <div class="float-start">
-                <div class="float-start ">
-                    <select class="form-select max-width-130 float-start mr-1" id="action-select-1">
-                        <option selected="" value="none">Hành động</option>
-                        <option value="del">Xóa</option>
-                    </select>
-                    <button type="submit" class="btn btn-outline-info float-start jsbtn_action">Áp dụng</button>
-                </div>
-            </div>
-            {{!-- Action top end --}}
-            {{!-- Pagination top start --}}
-            {{#ifcond data.totalPage '>' 1}}
-            <ul class="pagination my-1 float-end">
-                <li class="page-first page-item {{#ifcond data.paged '<=' 1}}disabled{{/ifcond}}">
-                    <a class="page-link" paged="1">«</a>
-                </li>
-                <li class="page-pre page-item {{#ifcond data.paged '<=' 1}}disabled{{/ifcond}}">
-                    <a class="page-link" paged="{{sub data.paged 1}}">‹</a>
-                </li>
-                <li class="page-item max-width-50 ">
-                    <div class="row g-2 d-flex">
-                        <div class="col-auto">
-                            <input type="text" name="index-page-1" class="page-index form-control pd-025-075"
-                                value="{{data.paged}}" id="input-pageindex-1">
+        </div><!-- /col-left -->
+        <div id="col-right">
+            <div class="col-wrap">
+                <form id="posts-filter" action="/admin/tag/action" method="POST">
+                    <div class="tablenav top">
+                        <div class="alignleft actions bulkactions">
+                            <select name="action" id="bulk-action-selector-top">
+                                <option value="-1">Hành động</option>
+                                <option value="1">Xóa</option>
+                            </select>
+                            <input type="submit" id="doaction" class="button action" value="Áp dụng">
                         </div>
+                        <div class="tablenav-pages"><span class="displaying-num">{{data.totalCount}} mục</span>
+                            <span class="pagination-links">
+                                <a class="first-page button  {{#ifcond data.paged '==' 1}} disabled {{/ifcond}}"
+                                    {{#ifcond data.paged '>' 1}} href="/admin/tag?paged=1&s={{data.s}}" {{/ifcond}}>
+                                    <span>«</span>
+                                </a>
+                                <a class="first-page button  {{#ifcond data.paged '==' 1}} disabled {{/ifcond}}"
+                                    {{#ifcond data.paged '>' 1}} href="/admin/tag?paged=1&s={{data.s}}" {{/ifcond}}>
+                                    <span>‹</span>
+                                </a>
+                                <span class="screen-reader-text">Trang hiện tại</span><span id="table-paging"
+                                    class="paging-input"><span class="tablenav-paging-text">{{data.paged}} trên <span
+                                            class="total-pages">{{data.totalPage}}</span></span></span>
+                                <a class="next-page button {{#ifcond data.paged '>=' data.totalPage}} disabled {{/ifcond}}"
+                                    {{#ifcond data.paged '<' data.totalPage}}
+                                    href="/admin/tag?paged={{add data.paged 1}}&s={{data.s}}" {{/ifcond}}><span
+                                        class="screen-reader-text">Trang sau</span><span aria-hidden="true">›</span></a>
+                                <a class="last-page button {{#ifcond data.paged '>=' data.totalPage}} disabled {{/ifcond}}"
+                                    {{#ifcond data.paged '<' data.totalPage}}
+                                    href="/admin/tag?paged={{data.totalPage}}&s={{data.s}}" {{/ifcond}}><span
+                                        class="screen-reader-text">Trang cuối</span><span
+                                        aria-hidden="true">»</span></a></span>
+                        </div>
+                        <br class="clear">
                     </div>
-                </li>
-                <li class="page-item disabled"><a class="page-link">trên {{data.totalPage}}</a></li>
-                <li class="page-next page-item {{#ifcond data.paged '>=' data.totalPage}}disabled{{/ifcond}}">
-                    <a class="page-link" paged="{{add data.paged 1}}">›</a>
-                </li>
-                <li class="page-last page-item {{#ifcond data.paged '>=' data.totalPage}}disabled{{/ifcond}}">
-                    <a class="page-link" paged="{{data.totalPage}}">»</a>
-                </li>
-            </ul>
-            {{/ifcond}}
-            <div class="float-end total-items mx-1 total-count">{{data.totalCount}} mục</div>
-            {{!-- Pagination top end --}}
-        </nav>
-        {{!-- Navigation top end --}}
-        <div class="border tab-content rounded-bottom table-responsive clear-both">
-            {{!-- Table data start --}}
-            <form id="frmRecord" action="/admin/tags/delete" method="post">
-                <table class="table table-striped table-bordered">
-                    <thead>
-                        <tr class="">
-                            <th id="total_count" style="width: 15px;" scope="col"><input type="checkbox"
-                                    class="check-all form-check-input">
-                            </th>
-                            <th scope="col">Tên thẻ</th>
-                            <th scope="col">Đường dẫn</th>
-                            <th scope="col">Mô tả</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tags_table">
+                    <h2 class="screen-reader-text">Danh sách tag</h2>
+                    <table class="wp-list-table widefat fixed striped table-view-list tags">
+                        <thead>
+                            <tr>
+                                <td id="cb" class="manage-column column-cb check-column"><label
+                                        class="screen-reader-text" for="cb-select-all-1">Chọn toàn bộ</label><input
+                                        id="cb-select-all-1" type="checkbox"></td>
+                                <th scope="col" id="name"
+                                    class="manage-column column-name column-primary sortable desc">
+                                    Tên
+                                </th>
+                                <th scope="col" id="description" class="manage-column column-description sortable desc">
+                                    Môtả
+                                </th>
+                                <th scope="col" id="slug" class="manage-column column-slug sortable desc">
+                                    Đường dẫn
+                                </th>
+                            </tr>
+                        </thead>
 
-                        {{#each data.tags}}
-                        <tr>
-                            <th style="width:15px" class="" scope="row"><input type="checkbox"
-                                    class="checkbox form-check-input" name="items[]" value="{{this.id}}">
-                            </th>
-                            <td> 
-                                <strong>
-                                    <a class="row-title">
-                                        {{this.name}}
-                                    </a>
-                                </strong><br>
-                                <div class="row-actions">
-                                    <span class="edit">Sửa  | </span>
-                                    <span class="delete">Xóa  | </span>
-                                    <span class="view">Xem </span>
-                                </div>
-                            </td>
-                            <td>{{this.link}}</td>
-                            <td>{{this.description}}</td>
-                        </tr>
-                        {{/each}}
-                        {{#ifcond data.totalCount '==' 0}}
-                        <tr id="emty_record">
-                            <th colspan="4" class="text-center">Không có dữ liệu</th>
-                        </tr>
-                        {{/ifcond}}
-                    </tbody>
-                </table>
-            </form>
-            {{!-- Table data end --}}
-            {{!-- Navigation bot start --}}
-            <nav>
-                {{!-- Action bot start --}}
-                <div class="float-start ">
-                    <select class="form-select max-width-130 float-start mr-1" id="action-select-2">
-                        <option selected="" value="none">Hành động</option>
-                        <option value="del">Xóa</option>
-                    </select>
-                    <button type="submit" class="btn btn-outline-info float-start jsbtn_action">Áp dụng</button>
-                </div>
-                {{!-- Action bot end --}}
-                {{!-- Pagination bot start --}}
-                {{#ifcond data.totalPage '>' 1}}
-                <ul class="pagination my-1 float-end">
-                    <li class="page-first page-item {{#ifcond data.paged '<=' 1}}disabled{{/ifcond}}">
-                        <a class="page-link" paged="1">«</a>
-                    </li>
-                    <li class="page-pre page-item {{#ifcond data.paged '<=' 1}}disabled{{/ifcond}}">
-                        <a class="page-link" paged="{{sub data.paged 1}}">‹</a>
-                    </li>
-                    <li class="page-item max-width-50 ">
-                        <div class="row g-2 d-flex">
-                            <div class="col-auto">
-                                <input type="text" name="index-page-2" class="page-index form-control pd-025-075"
-                                    value="{{data.paged}}" id="input-pageindex-2">
-                            </div>
+                        <tbody id="the-list" data-wp-lists="list:tag">
+                            {{#each data.tags}}
+                            <tr class="level-0">
+                                <th scope="row" class="check-column">
+                                    <input type="checkbox" name="delete_tags[]" id="cb-select-1" value="{{this.id}}">
+                                </th>
+                                <td class="name column-name has-row-actions column-primary" data-colname="Tên">
+                                    <strong>
+                                        <a class="row-title" href="/admin/tag/edit?id={{this.id}}">{{this.name}}</a>
+                                    </strong><br>
+                                    <div class="row-actions">
+                                        <span class="edit">
+                                            <a href="/admin/tag/edit">Chỉnh sửa</a> |
+                                        </span>
+                                        <span class="inline hide-if-no-js">
+                                            <span class="delete"><a href="/admin/tag/delete?id={{this.id}}"
+                                                    class="delete-tag aria-button-if-js" role="button">Xóa</a> | </span>
+                                            <span class="view">
+                                                <a href="/tag/{{this.slug}}">Xem</a>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <button type="button" class="toggle-row">
+                                        <span class="screen-reader-text">Hiển thị chi tiết</span>
+                                    </button>
+                                </td>
+                                <td class="description column-description">
+                                    {{this.description}}
+                                </td>
+                                <td class="slug column-slug">
+                                    {{this.slug}}
+                                </td>
+                            </tr>
+                            {{/each}}
+                            {{#ifcond data.totalCount '==' 0}}
+                            <tr class="no-items">
+                                <td class="colspanchange" colspan="3">Không tìm thấy thẻ đánh dấu nào.</td>
+                            </tr>
+                            {{/ifcond}}
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td class="manage-column column-cb check-column"><label class="screen-reader-text"
+                                        for="cb-select-all-2">Chọn toàn bộ</label><input id="cb-select-all-2"
+                                        type="checkbox"></td>
+                                <th scope="col" class="manage-column column-name column-primary sortable desc">
+                                    Tên
+                                </th>
+                                <th scope="col" class="manage-column column-description sortable desc">
+                                    Mô tả
+                                </th>
+                                <th scope="col" class="manage-column column-slug sortable desc">
+                                    Đường dẫn
+                                </th>
+                            </tr>
+                        </tfoot>
+
+                    </table>
+                </form>
+                <form method="get">
+                    <input type="hidden" id="tag-search-input" name="s" value="{{data.s}}">
+                    <div class="tablenav bottom">
+                        <div class="tablenav-pages"><span class="displaying-num">{{data.totalCount}} mục</span>
+                            <span class="pagination-links">
+                                <a class="first-page button  {{#ifcond data.paged '==' 1}} disabled {{/ifcond}}"
+                                    {{#ifcond data.paged '>' 1}} href="/admin/tag?paged=1&s={{data.s}}" {{/ifcond}}>
+                                    <span>«</span>
+                                </a>
+                                <a class="first-page button  {{#ifcond data.paged '==' 1}} disabled {{/ifcond}}"
+                                    {{#ifcond data.paged '>' 1}} href="/admin/tag?paged=1&s={{data.s}}" {{/ifcond}}>
+                                    <span>‹</span>
+                                </a>
+                                {{!--<span class="screen-reader-text">Trang hiện tại</span><span id="table-paging"
+                                    class="paging-input"><span class="tablenav-paging-text">{{data.paged}} trên <span
+                                            class="total-pages">{{data.totalPage}}</span></span></span>--}}
+
+                                <span class="paging-input"><label for="current-page-selector"
+                                        class="screen-reader-text">Trang hiện tại</label><input class="current-page"
+                                        id="current-page-selector" type="text" name="paged" value="{{data.paged}}"
+                                        size="1" aria-describedby="table-paging"><span class="tablenav-paging-text">
+                                        trên <span class="total-pages">{{data.totalPage}}</span></span></span>
+
+                                <a class="next-page button {{#ifcond data.paged '>=' data.totalPage}} disabled {{/ifcond}}"
+                                    {{#ifcond data.paged '<' data.totalPage}}
+                                    href="/admin/tag?paged={{add data.paged 1}}&s={{data.s}}" {{/ifcond}}><span
+                                        class="screen-reader-text">Trang sau</span><span aria-hidden="true">›</span></a>
+                                <a class="last-page button {{#ifcond data.paged '>=' data.totalPage}} disabled {{/ifcond}}"
+                                    {{#ifcond data.paged '<' data.totalPage}}
+                                    href="/admin/tag?paged={{data.totalPage}}&s={{data.s}}" {{/ifcond}}><span
+                                        class="screen-reader-text">Trang cuối</span><span
+                                        aria-hidden="true">»</span></a></span>
                         </div>
-                    </li>
-                    <li class="page-item disabled"><a class="page-link">trên {{data.totalPage}}</a></li>
-                    <li class="page-next page-item {{#ifcond data.paged '>=' data.totalPage}}disabled{{/ifcond}}">
-                        <a class="page-link" paged="{{add data.paged 1}}">›</a>
-                    </li>
-                    <li class="page-last page-item {{#ifcond data.paged '>=' data.totalPage}}disabled{{/ifcond}}">
-                        <a class="page-link" paged="{{data.totalPage}}">»</a>
-                    </li>
-                </ul>
-                {{/ifcond}}
-                <div class="float-end total-items mx-1 total-count">{{data.totalCount}} mục</div>
-                {{!-- Pagination bot end --}}
-            </nav>
-            {{!-- Navigation bot end --}}
-        </div>
-
-    </div>
+                        <br class="clear">
+                    </div>
+                </form>
+            </div>
+        </div><!-- /col-right -->
+    </div><!-- /col-container -->
 </div>
-<script>
-    $(document).ready(function () {
-        $('.jsbtn_action').click(function () {
-            let action_name = $('#action-select-1').val();
-            if (!action_name || action_name == 'none' || $('.checkbox:checked').length <= 0)
-                return;
-            $('#frmRecord').submit();
-        })
-        //Thay đổi hành động ở 2 select
-        $('#action-select-1').change(function () {
-            var value = $(this).val();
-            $('#action-select-2').val(value);
-        });
-        $('#action-select-2').change(function () {
-            var value = $(this).val();
-            $('#action-select-1').val(value);
-        });
-
-        //Thay đổi page input page index
-        $('#input-pageindex-1').on('keyup', function (e) {
-            if (e.keyCode === 13) {
-                $('#btn-search').click();
-            }
-            var value = $(this).val();
-            $('#input-pageindex-2').val(value);
-        });
-        $('#input-pageindex-2').on('keyup', function (e) {
-            if (e.keyCode === 13) {
-                $('#btn-search').click();
-            }
-            var value = $(this).val();
-            $('#input-pageindex-1').val(value);
-        });
-        initEventCheckbox()
-    });
-    //page link click
-    $('.page-link').click(function (e) {
-        e.preventDefault()
-        let q = $('#q').val() || '';
-        let paged = $(this).attr('paged');
-        if (!paged || isNaN(paged))
-            paged = 1;
-        window.location.href = `/admin/tags?paged=${paged}&q=` + q;
-    })
-    function initEventCheckbox() {
-        //chọn bản ghi
-        // Bắt sự kiện click cho checkbox all
-        $('.check-all').click(function () {
-            // Nếu checkbox all được chọn
-            if ($(this).is(':checked')) {
-                // Chọn tất cả các checkbox con
-                $('.checkbox').prop('checked', true);
-            } else {
-                // Bỏ chọn tất cả các checkbox con
-                $('.checkbox').prop('checked', false);
-            }
-        });
-        // Bắt sự kiện click cho các checkbox con
-        $('.checkbox').click(function () {
-            // Nếu có bất kỳ checkbox con nào không được chọn
-            if ($('.checkbox:not(:checked)').length) {
-                // Bỏ chọn checkbox all
-                $('.check-all').prop('checked', false);
-            } else {
-                // Chọn checkbox all
-                $('.check-all').prop('checked', true);
-            }
-        });
-    }
-    //Gửi yêu cầu thêm mới
-    $('#btn-add-tag').click(function () {
-        if ($('#frmAddTag').valid()) {
-            showLoading();
-            let name = $('#name').val();
-            let link = $('#link').val();
-            let description = $('#description').val();
-            $.ajax({
-                url: '/admin/tags/create',
-                type: 'POST',
-                data: { name: name, link: link, description: description },
-                success: (res) => {
-                    hideLoading();
-                    if (res.status == 200) {
-                        $('#toast-success-body').html('Thêm thẻ thành công');
-                        $('#q').val('');
-                        let tags_table = $('#tags_table');
-                        tags_table.prepend(rowElement(res.data));
-                        showToastSuccess();
-                        $('#emty_record').remove();
-                    } else {
-                        if (res.error.name == 'SequelizeUniqueConstraintError') {
-                            $('#toast-error-body').html('Tên thẻ đã tồn tại');
-                        } else {
-                            $('#toast-error-body').html('Thêm thẻ thất bại');
-                        }
-                        showToastError();
-                    }
-                },
-                error: (err) => {
-                    hideLoading();
-                    $('#toast-error-body').html('Thêm thẻ thất bại');
-                    showToastError();
-                }
-            })
-        }
-    })
-    let frmSearch = $('#frmSearch');
-    frmSearch.submit(function (envent) {
-        // Ngăn chặn việc tải lại trang khi submit form
-        event.preventDefault();
-        let q = $('#q').val() || '';
-        let paged = $('#input-pageindex-1').val();
-        if (!paged || isNaN(paged))
-            paged = 1;
-        window.location.href = `/admin/tags?paged=${paged}&q=` + q;
-    });
-    function rowElement(tag) {
-        return ` <tr>
-                     <th style="width:15px" class="" scope="row"><input type="checkbox"
-                                    class="checkbox form-check-input" name="items[]" value="${tag.id}">
-                    </th>
-                    <td>${tag.name}</td>
-                    <td>${tag.link}</td>
-                    <td>${tag.description}</td>
-                </tr>`;
-    }
-    //Validate thêm thẻ mới
-    $('#frmAddTag').validate({
-        rules: {
-            name: {
-                required: true,
-                maxlength: 150,
-            },
-            link: {
-                required: true,
-                maxlength: 150
-            }
-        },
-        messages: {
-            name: {
-                required: 'Tên thẻ không được để trống',
-                maxlength: 'Tên không quá 150 ký tự',
-            },
-            link: {
-                required: 'Đường dẫn không được để trống',
-                maxlength: 'đường dẫn không quá 150 ký tự',
-            }
-        }
-    });
-
-</script>
+<script src="/public/admin/js/tags.js"></script>

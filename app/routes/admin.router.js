@@ -8,7 +8,7 @@ const constant_util = require('../utils/constant.util');
 
 router.use('/login',login_router);
 router.post('/upload-image',upload_controller.uploadImage(), upload_controller.uploadHandle);
-router.use('/tags',admin_tag_router);
+router.use('/tag',admin_tag_router);
 router.use('/categorys',admin_cat_router);
 router.get('*',(req,res)=>{
     res.render(constant_util.page.ADMIN,{layout:constant_util.layout.ADMIN});
