@@ -5,5 +5,6 @@ const MESSAGES={
     ERR_WRONG_PASS:'Mật khẩu không đúng',
     ERR_TAG_ADD_REQIRED:'Đường dẫn và tên thẻ không được rỗng',
     ERR_CATEGORY_ADD_REQIRED:'Tên và đường dẫn chuyên mục không được rỗng',
+    ERR_TAG_NOT_FOUND:'Không tìm thấy thẻ',
 }
 module.exports= MESSAGES;

@@ -57,6 +57,79 @@ jQuery(function ($) {
 		}
 		return false;
 	});
+	$('#update_submit').on('click', function () {
+		var form = $(this).parents('form');
+
+		if (addingTerm) {
+
+			return false;
+		}
+
+		addingTerm = true;
+		form.find('.submit .spinner').addClass('is-active');
+		if (form.valid()) {
+			let id=$('#id').val();
+			let tag_name = $('#tag_name').val();
+			let tag_slug = $('#tag_slug').val();
+			let tag_description = $('#tag_description').val();
+			$.ajax({
+				url: '/admin/tag/update',
+				type: 'POST',
+				data: {id:id, name: tag_name, slug: tag_slug, description: tag_description },
+				success: (res) => {
+					addingTerm = false;
+					form.find('.submit .spinner').removeClass('is-active');
+					if (res.status == 200) {
+						$('#ajax-response').html(`<div class="updated"><p>Cập nhật thành công</p><a href="/admin/tag">← Tới mục Thẻ</a></p></div><p>`);
+					} else {
+						if (res.error.name == 'SequelizeUniqueConstraintError') {
+							$('#ajax-response').html('<div class="error"><p>Tên này đã tồn tại rồi, không dùng được</p></div>');
+							
+						} else {
+							$('#ajax-response').html('<div class="error"><p>'+res.error+'</p></div>');
+						}
+					}
+				},
+				error: (err) => {
+					addingTerm = false;
+					form.find('.submit .spinner').removeClass('is-active');
+					$('#ajax-response').html('<div class="error"><p>Đã xảy ra lỗi. Hãy báo với bộ phận phát triển về vấn đề này.</p></div>');
+				}
+			})
+		} else {
+			addingTerm = false;
+			form.find('.submit .spinner').removeClass('is-active');
+		}
+		return false;
+	});
+	$('a.delete').on('click',function(e){
+		//ngăn chặn hành động mặc định
+		e.preventDefault();
+
+		//Xác nhận người dùng có muốn xóa không
+		const delConfirm = confirm('Bạn muốn xóa bản ghi à!');
+		//Nếu người dùng xác nhận muốn xóa
+		if(delConfirm){
+			$('.submit .spinner').addClass('is-active');
+			let id = $(this).attr('id');
+			let href = $(this).attr('href');
+			$.ajax({
+				url: href,
+				type: 'POST',
+				data: {id:id},
+				success: (res) => {
+					addingTerm = false;
+					$('.submit .spinner').removeClass('is-active');
+					window.location.href= '/admin/tag';
+				},
+				error: (err) => {
+					addingTerm = false;
+					$('.submit .spinner').removeClass('is-active');
+					$('#ajax-response').html('<div class="error"><p>Đã xảy ra lỗi. Hãy báo với bộ phận phát triển về vấn đề này.</p></div>');
+				}
+			})
+		}
+	});
 });
 function rowElement(tag) {
 	return `<tr class="level-0">
@@ -65,11 +138,11 @@ function rowElement(tag) {
 				</th>
 				<td class="name column-name has-row-actions column-primary" data-colname="Tên">
 					<strong>
-						<a class="row-title" href="/admin/tag/edit?id=${tag.id}" aria-label="“${tag.name}” (Chỉnh sửa)">${tag.name}</a>
+						<a class="row-title" href="/admin/tag/update?id=${tag.id}" aria-label="“${tag.name}” (Chỉnh sửa)">${tag.name}</a>
 					</strong><br>
 					<div class="row-actions">
 						<span class="edit">
-								<a href="/admin/tag/edit?id=${tag.id}">Chỉnh sửa</a> |
+								<a href="/admin/tag/update?id=${tag.id}">Chỉnh sửa</a> |
 							</span>
 							<span class="inline hide-if-no-js">
 								<span class="delete"><a href="/admin/tag/delete?id=" class="delete-tag aria-button-if-js"

@@ -16,7 +16,7 @@ const Constants ={
         ADMIN:'admin/index',
         ADMIN_TAG:'admin/tag/index',
         ADMIN_TAG_UPDATE:'admin/tag/update',
-        ADMIN_CATEGORY:'admin/category',
+        ADMIN_CATEGORY:'admin/cat/index',
         LOGIN:'./login/index',
         FORGOT_PASS:'/login/forgot_password',
         HOME:'home'

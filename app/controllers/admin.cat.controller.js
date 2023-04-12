@@ -3,7 +3,8 @@ const CategoryModel = require('../models/cat.model');
 const message_util = require('../utils/message.util');
 class AdminCatController {
     static page_size = 12;
-    async getIndex(req, res) {
+    async get_index(req, res) {
+        console.log('heloo')
         try {
             let index = 1;
             let cats = await CategoryModel.getCategorys(index, AdminCatController.page_size);

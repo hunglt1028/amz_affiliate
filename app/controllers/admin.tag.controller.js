@@ -22,7 +22,7 @@ class AdminTagController {
             data.totalPage = totalPage;
             data.s = s;
             data.paged = paged;
-            res.render(constant_util.page.ADMIN_TAG, { layout: constant_util.layout.ADMIN, data: data });
+            res.render(constant_util.page.ADMIN_TAG, { layout: constant_util.layout.ADMIN, data: data ,title: constant_util.title.ADMIN_TAG});
         } catch (error) {
             console.log(error);
         }
@@ -50,12 +50,10 @@ class AdminTagController {
     async post_delete(req, res) {
         try {
             let {id}= req.body;
-            await TagModel.destroy({where:{ where: { id: id }}});
-            res_do_util.status = status_util.SUSCCESS;
-            return res.redirect(constant_util.redirect.ADMIN_TAGS);
+            await TagModel.destroy({where:{id:id}});
+            return res.status(200).end();
         } catch (error) {
-            console.log('error', error);
-            return res.redirect(constant_util.redirect.ADMIN_TAGS);
+            return res.status(500).json({error:error});
         }
     }
     async post_action(req, res) {
@@ -76,10 +74,8 @@ class AdminTagController {
     async get_update(req, res) {
         try {
             let id = req.query.id;
-            let tag = await TagModel.findByPk(id);
-
-            res_do_util.status = status_util.SUSCCESS;
-            return res.render(constant_util.page.ADMIN_TAG_UPDATE, { layout: constant_util.layout.ADMIN, data: res_do_util, title: constant_util.title.ADMIN_TAG_UPDATE });
+            let tag = (await TagModel.findByPk(id)).get({plain:true});
+            return res.render(constant_util.page.ADMIN_TAG_UPDATE, { layout: constant_util.layout.ADMIN, data: tag, title: constant_util.title.ADMIN_TAG_UPDATE });
         } catch (error) {
             console.log('error', error);
             return res.redirect(constant_util.redirect.ADMIN_TAGS);
@@ -87,14 +83,27 @@ class AdminTagController {
     }
     async post_update(req, res) {
         try {
-            let id = req.query.id;
+            let {id, name, slug, description } = req.body;
             let tag = await TagModel.findByPk(id);
-            data.tag
+            if(!tag){
+                res_do_util.status = status_util.NOT_FOUND;
+                res_do_util.error = message_util.ERR_TAG_NOT_FOUND;
+                return res.json(res_do_util);
+            }
+            if (!name || !slug) {
+                res_do_util.status = status_util.BAD_REQ;
+                res_do_util.error = message_util.ERR_TAG_ADD_REQIRED;
+                return res.json(res_do_util);
+            }
+            await tag.update({name:name,slug:slug,description:description});
             res_do_util.status = status_util.SUSCCESS;
-            return res.redirect(constant_util.redirect.ADMIN_TAGS);
+            res_do_util.data = { 'id': tag.id, 'name': tag.name, 'slug': tag.slug, 'description': tag.description };
+            return res.status(200).json(res_do_util);
         } catch (error) {
-            console.log('error', error);
-            return res.redirect(constant_util.redirect.ADMIN_TAGS);
+            console.log(error);
+            res_do_util.status = status_util.BAD_REQ;
+            res_do_util.error = error;
+            return res.json(res_do_util);
         }
     }
 }

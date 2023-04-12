@@ -1,11 +1,11 @@
 <div class="wrap nosubsub">
-    <h1 class="wp-heading-inline">Thẻ</h1>
+    <h1 class="wp-heading-inline">Chuyên mục</h1>
     <hr class="wp-header-end">
     <div id="ajax-response"></div>
     <form class="search-form wp-clearfix" method="get">
         <p class="search-box">
-            <input type="search" id="tag-search-input" name="s" value="{{data.s}}">
-            <input type="submit" id="search-submit" class="button" value="Tìm Thẻ">
+            <input type="search" id="cat-search-input" name="s" value="{{data.s}}">
+            <input type="submit" id="search-submit" class="button" value="Tìm kiếm chuyên mục">
         </p>
 
     </form>
@@ -13,11 +13,11 @@
         <div id="col-left">
             <div class="col-wrap">
                 <div class="form-wrap">
-                    <h2>Thêm thẻ</h2>
-                    <form id="addtag" method="post" class="validate">
+                    <h2>Thêm chuyên mục</h2>
+                    <form id="addcat" method="post" class="validate">
                         <div class="form-field form-required term-name-wrap">
-                            <label for="tag-name">Tên *</label>
-                            <input name="tag_name" id="tag_name" type="text" value="" size="40" aria-required="true"
+                            <label for="cat-name">Tên *</label>
+                            <input name="cat_name" id="cat_name" type="text" value="" size="40" aria-required="true"
                                 aria-describedby="name-description">
                             <p id="name-description">Tên riêng sẽ hiển thị trên trang mạng của bạn.</p>
                         </div>
@@ -27,6 +27,26 @@
                                 aria-describedby="slug-description">
                             <p id="slug-description">Chuỗi cho đường dẫn tĩnh là phiên bản của tên hợp chuẩn với Đường
                                 dẫn (URL). Chuỗi này bao gồm chữ cái thường, số và dấu gạch ngang (-).</p>
+                        </div>
+                        <div class="form-field term-parent-wrap">
+                            <label for="parent">Chuyên mục cha</label>
+                            <select name="parent" id="parent" class="postform">
+                                <option value="-1">Trống</option>
+                                <option class="level-0" value="1">Uncategorized</option>
+                                <option class="level-0" value="2">Giới Thiệu</option>
+                                <option class="level-0" value="3">Liên Hệ</option>
+                                <option class="level-0" value="4">Sản phẩm</option>
+                                <option class="level-1" value="9">&nbsp;&nbsp;&nbsp;01-Mitsubishi Xpander</option>
+                                <option class="level-1" value="5">&nbsp;&nbsp;&nbsp;02-Mitsubishi Attrage</option>
+                                <option class="level-1" value="6">&nbsp;&nbsp;&nbsp;03-Mitsubishi OutLander</option>
+                                <option class="level-1" value="8">&nbsp;&nbsp;&nbsp;04-Mitsubishi Triton</option>
+                                <option class="level-1" value="7">&nbsp;&nbsp;&nbsp;05-Mitsubishi Pajero Sport</option>
+                                <option class="level-1" value="13">&nbsp;&nbsp;&nbsp;06-Mitsubishi XFC</option>
+                                <option class="level-0" value="10">Tin tức</option>
+                            </select>
+                            <p>Chuyên mục khác với thẻ, bạn có thể sử dụng nhiều cấp chuyên mục. Ví dụ: Trong chuyên mục
+                                nhạc, bạn có chuyên mục con là nhạc Pop, nhạc Jazz. Việc này hoàn toàn là tùy theo ý
+                                bạn.</p>
                         </div>
                         <div class="form-field term-description-wrap">
                             <label for="tag-description">Mô tả</label>
@@ -115,8 +135,9 @@
                                             <a href="/admin/tag/update?id={{this.id}}">Chỉnh sửa</a> |
                                         </span>
                                         <span class="inline hide-if-no-js">
-                                            <span class="delete"><a class="delete" id="{{this.id}}" href="/admin/tag/delete"
-                                                    class="delete-tag aria-button-if-js" role="button">Xóa</a> | </span>
+                                            <span class="delete"><a class="delete" id="{{this.id}}"
+                                                    href="/admin/tag/delete" class="delete-tag aria-button-if-js"
+                                                    role="button">Xóa</a> | </span>
                                             <span class="view">
                                                 <a href="/tag/{{this.slug}}">Xem</a>
                                             </span>

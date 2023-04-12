@@ -1,6 +1,6 @@
 const dbname='amz_affiliate';
 module.exports ={
-    host:"localhost",
+    host:"127.0.0.1",
     user:"root",
     password:"root",
     dbname:dbname,
