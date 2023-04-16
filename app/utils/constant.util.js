@@ -3,7 +3,7 @@ const Constants ={
         LOGIN:'Đăng nhập',
         HOME:'Trang chủ',
         FORGOT_PASS:'Quên mật khẩu',
-        ADMIN_CATEGORY:'Chuyên mục',
+        ADMIN_CAT:'Chuyên mục',
         ADMIN_TAG:'Thẻ',
         ADMIN_TAG_UPDATE:'Cập nhật thẻ'
     },
@@ -16,7 +16,7 @@ const Constants ={
         ADMIN:'admin/index',
         ADMIN_TAG:'admin/tag/index',
         ADMIN_TAG_UPDATE:'admin/tag/update',
-        ADMIN_CATEGORY:'admin/cat/index',
+        ADMIN_CAT:'admin/cat/index',
         LOGIN:'./login/index',
         FORGOT_PASS:'/login/forgot_password',
         HOME:'home'
@@ -25,7 +25,8 @@ const Constants ={
         ADMIN:'/admin',
         LOGIN:'/login',
         HOME:'/',
-        ADMIN_TAGS:'/admin/tag'
+        ADMIN_TAGS:'/admin/tag',
+        ADMIN_CAT:'/admin/cat'
     }
 }
 module.exports = Constants;

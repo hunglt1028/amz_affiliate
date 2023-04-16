@@ -16,41 +16,40 @@
                     <h2>Thêm chuyên mục</h2>
                     <form id="addcat" method="post" class="validate">
                         <div class="form-field form-required term-name-wrap">
-                            <label for="cat-name">Tên *</label>
+                            <label for="cat_name-name">Tên *</label>
                             <input name="cat_name" id="cat_name" type="text" value="" size="40" aria-required="true"
                                 aria-describedby="name-description">
                             <p id="name-description">Tên riêng sẽ hiển thị trên trang mạng của bạn.</p>
                         </div>
                         <div class="form-field term-slug-wrap">
-                            <label for="tag_slug">Đường dẫn *</label>
-                            <input name="tag_slug" id="tag_slug" type="text" value="" size="40"
+                            <label for="cat_slug">Đường dẫn *</label>
+                            <input name="cat_slug" id="cat_slug" type="text" value="" size="40"
                                 aria-describedby="slug-description">
                             <p id="slug-description">Chuỗi cho đường dẫn tĩnh là phiên bản của tên hợp chuẩn với Đường
                                 dẫn (URL). Chuỗi này bao gồm chữ cái thường, số và dấu gạch ngang (-).</p>
                         </div>
                         <div class="form-field term-parent-wrap">
-                            <label for="parent">Chuyên mục cha</label>
-                            <select name="parent" id="parent" class="postform">
+                            <label for="cat_parent">Chuyên mục cha</label>
+                            <select name="cat_parent" id="cat_parent" class="postform">
                                 <option value="-1">Trống</option>
-                                <option class="level-0" value="1">Uncategorized</option>
-                                <option class="level-0" value="2">Giới Thiệu</option>
-                                <option class="level-0" value="3">Liên Hệ</option>
-                                <option class="level-0" value="4">Sản phẩm</option>
-                                <option class="level-1" value="9">&nbsp;&nbsp;&nbsp;01-Mitsubishi Xpander</option>
-                                <option class="level-1" value="5">&nbsp;&nbsp;&nbsp;02-Mitsubishi Attrage</option>
-                                <option class="level-1" value="6">&nbsp;&nbsp;&nbsp;03-Mitsubishi OutLander</option>
-                                <option class="level-1" value="8">&nbsp;&nbsp;&nbsp;04-Mitsubishi Triton</option>
-                                <option class="level-1" value="7">&nbsp;&nbsp;&nbsp;05-Mitsubishi Pajero Sport</option>
-                                <option class="level-1" value="13">&nbsp;&nbsp;&nbsp;06-Mitsubishi XFC</option>
-                                <option class="level-0" value="10">Tin tức</option>
+                                {{#each data.cats_drop}}
+                                <option class="level-0" value="{{this.id}}">{{this.name}}</option>
+                                {{#each this.children}}
+                                <option class="level-1" value="{{this.id}}">&nbsp;&nbsp;&nbsp;{{this.name}}</option>
+                                {{#each this.children}}
+                                <option class="level-2" value="{{this.id}}">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{this.name}}</option>
+                                {{/each}}
+                                {{/each}}
+                                {{/each}}
                             </select>
                             <p>Chuyên mục khác với thẻ, bạn có thể sử dụng nhiều cấp chuyên mục. Ví dụ: Trong chuyên mục
                                 nhạc, bạn có chuyên mục con là nhạc Pop, nhạc Jazz. Việc này hoàn toàn là tùy theo ý
                                 bạn.</p>
                         </div>
                         <div class="form-field term-description-wrap">
-                            <label for="tag-description">Mô tả</label>
-                            <textarea name="tag_description" id="tag_description" rows="5" cols="40"
+                            <label for="cat_description">Mô tả</label>
+                            <textarea name="cat_description" id="cat_description" rows="5" cols="40"
                                 aria-describedby="description-description"></textarea>
                             <p id="description-description">Thông thường mô tả này không được sử dụng trong các giao
                                 diện, tuy nhiên có vài giao diện có thể hiển thị mô tả này.</p>
@@ -66,7 +65,7 @@
         </div><!-- /col-left -->
         <div id="col-right">
             <div class="col-wrap">
-                <form id="posts-filter" action="/admin/tag/action" method="POST">
+                <form id="posts-filter" action="/admin/cat/action" method="POST">
                     <div class="tablenav top">
                         <div class="alignleft actions bulkactions">
                             <select name="action" id="bulk-action-selector-top">
@@ -78,11 +77,11 @@
                         <div class="tablenav-pages"><span class="displaying-num">{{data.totalCount}} mục</span>
                             <span class="pagination-links">
                                 <a class="first-page button  {{#ifcond data.paged '==' 1}} disabled {{/ifcond}}"
-                                    {{#ifcond data.paged '>' 1}} href="/admin/tag?paged=1&s={{data.s}}" {{/ifcond}}>
+                                    {{#ifcond data.paged '>' 1}} href="/admin/cat?paged=1&s={{data.s}}" {{/ifcond}}>
                                     <span>«</span>
                                 </a>
                                 <a class="first-page button  {{#ifcond data.paged '==' 1}} disabled {{/ifcond}}"
-                                    {{#ifcond data.paged '>' 1}} href="/admin/tag?paged=1&s={{data.s}}" {{/ifcond}}>
+                                    {{#ifcond data.paged '>' 1}} href="/admin/cat?paged=1&s={{data.s}}" {{/ifcond}}>
                                     <span>‹</span>
                                 </a>
                                 <span class="screen-reader-text">Trang hiện tại</span><span id="table-paging"
@@ -90,17 +89,17 @@
                                             class="total-pages">{{data.totalPage}}</span></span></span>
                                 <a class="next-page button {{#ifcond data.paged '>=' data.totalPage}} disabled {{/ifcond}}"
                                     {{#ifcond data.paged '<' data.totalPage}}
-                                    href="/admin/tag?paged={{add data.paged 1}}&s={{data.s}}" {{/ifcond}}><span
+                                    href="/admin/cat?paged={{add data.paged 1}}&s={{data.s}}" {{/ifcond}}><span
                                         class="screen-reader-text">Trang sau</span><span aria-hidden="true">›</span></a>
                                 <a class="last-page button {{#ifcond data.paged '>=' data.totalPage}} disabled {{/ifcond}}"
                                     {{#ifcond data.paged '<' data.totalPage}}
-                                    href="/admin/tag?paged={{data.totalPage}}&s={{data.s}}" {{/ifcond}}><span
+                                    href="/admin/cat?paged={{data.totalPage}}&s={{data.s}}" {{/ifcond}}><span
                                         class="screen-reader-text">Trang cuối</span><span
                                         aria-hidden="true">»</span></a></span>
                         </div>
                         <br class="clear">
                     </div>
-                    <h2 class="screen-reader-text">Danh sách tag</h2>
+                    <h2 class="screen-reader-text">Danh sách chuyên mục</h2>
                     <table class="wp-list-table widefat fixed striped table-view-list tags">
                         <thead>
                             <tr>
@@ -120,26 +119,26 @@
                             </tr>
                         </thead>
 
-                        <tbody id="the-list" data-wp-lists="list:tag">
-                            {{#each data.tags}}
+                        <tbody id="the-list" data-wp-lists="list:cats">
+                            {{#each data.cats}}
                             <tr class="level-0">
                                 <th scope="row" class="check-column">
-                                    <input type="checkbox" name="delete_tags[]" id="cb-select-1" value="{{this.id}}">
+                                    <input type="checkbox" name="delete_cats[]" id="cb-select-1" value="{{this.id}}">
                                 </th>
                                 <td class="name column-name has-row-actions column-primary" data-colname="Tên">
                                     <strong>
-                                        <a class="row-title" href="/admin/tag/update?id={{this.id}}">{{this.name}}</a>
+                                        <a class="row-title" href="/admin/cat/update?id={{this.id}}">{{this.name}}</a>
                                     </strong><br>
                                     <div class="row-actions">
                                         <span class="edit">
-                                            <a href="/admin/tag/update?id={{this.id}}">Chỉnh sửa</a> |
+                                            <a href="/admin/cat/update?id={{this.id}}">Chỉnh sửa</a> |
                                         </span>
                                         <span class="inline hide-if-no-js">
                                             <span class="delete"><a class="delete" id="{{this.id}}"
-                                                    href="/admin/tag/delete" class="delete-tag aria-button-if-js"
+                                                    href="/admin/cat/delete" class="delete-tag aria-button-if-js"
                                                     role="button">Xóa</a> | </span>
                                             <span class="view">
-                                                <a href="/tag/{{this.slug}}">Xem</a>
+                                                <a href="/cat/{{this.slug}}">Xem</a>
                                             </span>
                                         </span>
                                     </div>
@@ -187,11 +186,11 @@
                         <div class="tablenav-pages"><span class="displaying-num">{{data.totalCount}} mục</span>
                             <span class="pagination-links">
                                 <a class="first-page button  {{#ifcond data.paged '==' 1}} disabled {{/ifcond}}"
-                                    {{#ifcond data.paged '>' 1}} href="/admin/tag?paged=1&s={{data.s}}" {{/ifcond}}>
+                                    {{#ifcond data.paged '>' 1}} href="/admin/cat?paged=1&s={{data.s}}" {{/ifcond}}>
                                     <span>«</span>
                                 </a>
                                 <a class="first-page button  {{#ifcond data.paged '==' 1}} disabled {{/ifcond}}"
-                                    {{#ifcond data.paged '>' 1}} href="/admin/tag?paged=1&s={{data.s}}" {{/ifcond}}>
+                                    {{#ifcond data.paged '>' 1}} href="/admin/cat?paged=1&s={{data.s}}" {{/ifcond}}>
                                     <span>‹</span>
                                 </a>
                                 <span class="paging-input"><label for="current-page-selector"
@@ -202,11 +201,11 @@
 
                                 <a class="next-page button {{#ifcond data.paged '>=' data.totalPage}} disabled {{/ifcond}}"
                                     {{#ifcond data.paged '<' data.totalPage}}
-                                    href="/admin/tag?paged={{add data.paged 1}}&s={{data.s}}" {{/ifcond}}><span
+                                    href="/admin/cat?paged={{add data.paged 1}}&s={{data.s}}" {{/ifcond}}><span
                                         class="screen-reader-text">Trang sau</span><span aria-hidden="true">›</span></a>
                                 <a class="last-page button {{#ifcond data.paged '>=' data.totalPage}} disabled {{/ifcond}}"
                                     {{#ifcond data.paged '<' data.totalPage}}
-                                    href="/admin/tag?paged={{data.totalPage}}&s={{data.s}}" {{/ifcond}}><span
+                                    href="/admin/cat?paged={{data.totalPage}}&s={{data.s}}" {{/ifcond}}><span
                                         class="screen-reader-text">Trang cuối</span><span
                                         aria-hidden="true">»</span></a></span>
                         </div>
@@ -217,4 +216,4 @@
         </div><!-- /col-right -->
     </div><!-- /col-container -->
 </div>
-<script src="/public/admin/js/tags.js"></script>
+<script src="/public/admin/js/cats.js"></script>
